@@ -1,0 +1,643 @@
+/* ==========================================================================
+   Aldo Marsiglia — Architettura & Interior Design
+   Sistema visivo: tavola tecnica — carta chiara, inchiostro, blu progetto.
+   ========================================================================== */
+
+:root {
+  --paper: #f5f3ee;
+  --paper-alt: #efece3;
+  --ink: #1e1d1b;
+  --line: #cdc5b4;
+  --line-strong: #a89f8c;
+  --stone: #837a6c;
+  --blueprint: #2b4a5e;
+
+  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  --gap: clamp(1.25rem, 3vw, 2.5rem);
+  --edge: clamp(1.25rem, 5vw, 4rem);
+  --max: 76rem;
+}
+
+/* ---- reset ------------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1, h2, h3, p, figure {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blueprint);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- layout helpers ----------------------------------------------------- */
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-left: var(--edge);
+  padding-right: var(--edge);
+}
+
+.eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--blueprint);
+}
+
+/* scale-bar rule — divisore in stile barra di scala tecnica ---------------- */
+
+.scale-rule {
+  height: 10px;
+  background:
+    repeating-linear-gradient(
+      to right,
+      var(--ink) 0,
+      var(--ink) 1px,
+      transparent 1px,
+      transparent 28px
+    )
+    bottom / 100% 8px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) bottom / 100% 1px no-repeat;
+}
+
+/* ---- header -------------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--blueprint);
+}
+
+.nav {
+  display: flex;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.nav a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--stone);
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.nav a:hover {
+  color: var(--ink);
+}
+
+.nav a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--blueprint);
+}
+
+/* ---- buttons / links ------------------------------------------------------ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--ink);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--blueprint);
+  border-color: var(--blueprint);
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 0.15rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.link-arrow:hover {
+  color: var(--blueprint);
+  border-color: var(--blueprint);
+}
+
+/* ---- hero ------------------------------------------------------------------ */
+
+.hero {
+  position: relative;
+  padding-top: clamp(3rem, 9vw, 6rem);
+  padding-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+.hero__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.compass {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  opacity: 0.85;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin-top: 0.9rem;
+  max-width: 16ch;
+}
+
+.hero__lead {
+  margin-top: 1.6rem;
+  max-width: 40ch;
+  font-size: 1.05rem;
+  color: var(--stone);
+}
+
+.hero__actions {
+  margin-top: 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+}
+
+.hero__actions .eyebrow {
+  color: var(--stone);
+}
+
+/* ---- generic page header (non-home) ---------------------------------------- */
+
+.page-header {
+  padding-top: clamp(2.5rem, 7vw, 4rem);
+  padding-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.page-header h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  margin-top: 0.7rem;
+}
+
+.page-header__lead {
+  margin-top: 1.1rem;
+  max-width: 52ch;
+  color: var(--stone);
+  font-size: 1.02rem;
+}
+
+/* ---- section shell ----------------------------------------------------------- */
+
+.section {
+  padding-top: clamp(2.5rem, 6vw, 4rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.2rem;
+}
+
+.section__head h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  margin-top: 0.5rem;
+}
+
+/* ---- plate: image placeholder con mirini d'inquadratura ---------------------- */
+
+.plate {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-color: var(--paper-alt);
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--line) 0,
+    var(--line) 1px,
+    transparent 1px,
+    transparent 9px
+  );
+  overflow: hidden;
+}
+
+.plate--portrait {
+  aspect-ratio: 3 / 4;
+}
+
+.corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+
+.corner--tl { top: 10px; left: 10px; border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+.corner--tr { top: 10px; right: 10px; border-top: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+.corner--bl { bottom: 10px; left: 10px; border-bottom: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+.corner--br { bottom: 10px; right: 10px; border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); }
+
+.plate__code {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  background: var(--paper-alt);
+  padding: 2px 7px;
+}
+
+/* ---- project cards ------------------------------------------------------------ */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+}
+
+.project-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.project-card__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 0.9rem;
+  gap: 1rem;
+}
+
+.project-card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.08rem;
+}
+
+.project-card__category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--blueprint);
+  white-space: nowrap;
+}
+
+.project-card__note {
+  margin-top: 0.4rem;
+  font-size: 0.92rem;
+  color: var(--stone);
+}
+
+.project-card__year {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--stone);
+}
+
+.legend {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--stone);
+}
+
+/* ---- chi sono ------------------------------------------------------------------- */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 17rem 1fr;
+  gap: clamp(2rem, 6vw, 4.5rem);
+  align-items: start;
+}
+
+.about-bio p + p {
+  margin-top: 1.1rem;
+}
+
+.pull-quote {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  line-height: 1.35;
+  color: var(--ink);
+  margin: 1.8rem 0;
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--blueprint);
+  max-width: 32ch;
+}
+
+.method-list {
+  display: grid;
+  gap: 1.6rem;
+  margin-top: 1.5rem;
+}
+
+.method-item {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+}
+
+.method-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.method-item__num {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--blueprint);
+}
+
+.method-item h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.method-item p {
+  margin-top: 0.35rem;
+  color: var(--stone);
+  font-size: 0.95rem;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  padding: 0.4rem 0.7rem;
+}
+
+/* ---- contatti ------------------------------------------------------------------- */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: clamp(2rem, 6vw, 4.5rem);
+  align-items: start;
+}
+
+.title-block {
+  border: 1px solid var(--ink);
+}
+
+.title-block__row {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.title-block__row:first-child {
+  border-top: none;
+}
+
+.title-block__label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blueprint);
+}
+
+.title-block__value {
+  font-size: 0.95rem;
+}
+
+.social-row {
+  display: flex;
+  gap: 1.4rem;
+  margin-top: 1.4rem;
+}
+
+.social-row a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--stone);
+  border-bottom: 1px solid transparent;
+}
+
+.social-row a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+
+.form-field label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.form-field input,
+.form-field textarea {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  color: var(--ink);
+  background: var(--paper-alt);
+  border: 1px solid var(--line-strong);
+  padding: 0.75rem 0.9rem;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: 2px solid var(--blueprint);
+  outline-offset: 1px;
+  border-color: var(--blueprint);
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+/* ---- footer ---------------------------------------------------------------------- */
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  margin-top: clamp(3rem, 8vw, 5rem);
+  padding-top: 2rem;
+  padding-bottom: 2.4rem;
+}
+
+.site-footer .wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.site-footer__brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.site-footer__meta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--stone);
+  margin-top: 0.5rem;
+}
+
+/* ---- responsive -------------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-grid .plate {
+    max-width: 14rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .nav {
+    gap: 0.9rem;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__top {
+    flex-direction: column;
+  }
+
+  .compass {
+    align-self: flex-end;
+  }
+
+  .title-block__row {
+    grid-template-columns: 5.5rem 1fr;
+  }
+}

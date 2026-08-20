@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contatti — Aldo Marsiglia</title>
+<meta name="description" content="Contatti dello studio Aldo Marsiglia — architettura e interior design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html">A<span>M</span></a>
+    <nav class="nav" aria-label="Navigazione principale">
+      <a href="index.html">Home</a>
+      <a href="progetti.html">Progetti</a>
+      <a href="chi-sono.html">Chi sono</a>
+      <a href="contatti.html" aria-current="page">Contatti</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-header wrap">
+    <span class="eyebrow">Tav. 03 — Contatti</span>
+    <h1>Contatti</h1>
+    <p class="page-header__lead">Per una consulenza o per parlare di un progetto, scrivi o compila il modulo.</p>
+  </div>
+
+  <div class="wrap"><div class="scale-rule"></div></div>
+
+  <section class="section wrap">
+    <div class="contact-grid">
+
+      <div>
+        <div class="title-block">
+          <div class="title-block__row">
+            <span class="title-block__label">Studio</span>
+            <span class="title-block__value">Aldo Marsiglia</span>
+          </div>
+          <div class="title-block__row">
+            <span class="title-block__label">Email</span>
+            <span class="title-block__value">nome@dominio.it</span>
+          </div>
+          <div class="title-block__row">
+            <span class="title-block__label">Tel</span>
+            <span class="title-block__value">+39 000 000 0000</span>
+          </div>
+          <div class="title-block__row">
+            <span class="title-block__label">Sede</span>
+            <span class="title-block__value">Città, Regione</span>
+          </div>
+          <div class="title-block__row">
+            <span class="title-block__label">P.IVA</span>
+            <span class="title-block__value">00000000000</span>
+          </div>
+        </div>
+
+        <div class="social-row">
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Pinterest</a>
+        </div>
+      </div>
+
+      <!-- Il form non invia dati: serve collegarlo a un servizio (es. Formspree) o a uno script server-side -->
+      <form>
+        <div class="form-field">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" autocomplete="name" required>
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+        <div class="form-field">
+          <label for="messaggio">Messaggio</label>
+          <textarea id="messaggio" name="messaggio" required></textarea>
+        </div>
+        <button class="btn" type="submit">Invia messaggio</button>
+      </form>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="site-footer__brand">Aldo Marsiglia</div>
+      <div class="site-footer__meta">Studio di Architettura &amp; Interior Design</div>
+    </div>
+    <div class="site-footer__meta">© 2026 — <a href="contatti.html">Contatti</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

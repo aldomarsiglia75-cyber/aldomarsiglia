@@ -4,13 +4,14 @@
    ========================================================================== */
 
 :root {
-  --paper: #f5f3ee;
-  --paper-alt: #efece3;
-  --ink: #1e1d1b;
-  --line: #cdc5b4;
-  --line-strong: #a89f8c;
-  --stone: #837a6c;
-  --blueprint: #2b4a5e;
+  --paper: #f8f8f8;
+  --paper-alt: #efefef;
+  --ink: #2f2f2f;
+  --line: #e0e0e0;
+  --line-strong: #c7c7c7;
+  --stone: #767676;
+  --accent: #cc0000;
+  --accent-hover: #a30000;
 
   --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -61,7 +62,7 @@ h1, h2, h3, p, figure {
 }
 
 :focus-visible {
-  outline: 2px solid var(--blueprint);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -87,7 +88,7 @@ h1, h2, h3, p, figure {
   font-size: 0.72rem;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: var(--blueprint);
+  color: var(--accent);
 }
 
 /* scale-bar rule — divisore in stile barra di scala tecnica ---------------- */
@@ -133,7 +134,7 @@ h1, h2, h3, p, figure {
 }
 
 .logo span {
-  color: var(--blueprint);
+  color: var(--accent);
 }
 
 .nav {
@@ -159,7 +160,7 @@ h1, h2, h3, p, figure {
 
 .nav a[aria-current="page"] {
   color: var(--ink);
-  border-bottom-color: var(--blueprint);
+  border-bottom-color: var(--accent);
 }
 
 /* ---- buttons / links ------------------------------------------------------ */
@@ -181,8 +182,8 @@ h1, h2, h3, p, figure {
 }
 
 .btn:hover {
-  background: var(--blueprint);
-  border-color: var(--blueprint);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .link-arrow {
@@ -201,8 +202,8 @@ h1, h2, h3, p, figure {
 }
 
 .link-arrow:hover {
-  color: var(--blueprint);
-  border-color: var(--blueprint);
+  color: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 /* ---- hero ------------------------------------------------------------------ */
@@ -376,7 +377,7 @@ h1, h2, h3, p, figure {
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--blueprint);
+  color: var(--accent);
   white-space: nowrap;
 }
 
@@ -420,7 +421,7 @@ h1, h2, h3, p, figure {
   color: var(--ink);
   margin: 1.8rem 0;
   padding-left: 1.2rem;
-  border-left: 2px solid var(--blueprint);
+  border-left: 2px solid var(--accent);
   max-width: 32ch;
 }
 
@@ -446,7 +447,7 @@ h1, h2, h3, p, figure {
 .method-item__num {
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--blueprint);
+  color: var(--accent);
 }
 
 .method-item h3 {
@@ -508,7 +509,7 @@ h1, h2, h3, p, figure {
   font-size: 0.7rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--blueprint);
+  color: var(--accent);
 }
 
 .title-block__value {
@@ -563,9 +564,9 @@ h1, h2, h3, p, figure {
 
 .form-field input:focus,
 .form-field textarea:focus {
-  outline: 2px solid var(--blueprint);
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
-  border-color: var(--blueprint);
+  border-color: var(--accent);
 }
 
 .form-field textarea {

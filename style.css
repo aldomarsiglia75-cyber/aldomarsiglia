@@ -1,7 +1,47 @@
 /* ==========================================================================
    Aldo Marsiglia — Architettura & Interior Design
-   Sistema visivo: tavola tecnica — carta chiara, inchiostro, blu progetto.
+   Sistema visivo: tavola tecnica — carta chiara, inchiostro, accento rosso.
    ========================================================================== */
+
+@font-face {
+  font-family: "A Matter";
+  src: url("fonts/A_MATTER_.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/Manrope-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/Manrope-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/Manrope-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("fonts/Manrope-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --paper: #f8f8f8;
@@ -13,8 +53,8 @@
   --accent: #cc0000;
   --accent-hover: #a30000;
 
-  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "A Matter", Georgia, serif;
+  --font-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
 
   --gap: clamp(1.25rem, 3vw, 2.5rem);
@@ -126,7 +166,7 @@ h1, h2, h3, p, figure {
 }
 
 .logo {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: 1.15rem;
   letter-spacing: 0.02em;
@@ -230,10 +270,11 @@ h1, h2, h3, p, figure {
 
 .hero h1 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 400;
+  text-transform: uppercase;
   font-size: clamp(2.6rem, 7vw, 5rem);
-  line-height: 1.02;
-  letter-spacing: -0.01em;
+  line-height: 1.05;
+  letter-spacing: 0;
   margin-top: 0.9rem;
   max-width: 16ch;
 }
@@ -266,7 +307,9 @@ h1, h2, h3, p, figure {
 
 .page-header h1 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
   font-size: clamp(2.2rem, 6vw, 3.4rem);
   margin-top: 0.7rem;
 }
@@ -295,7 +338,7 @@ h1, h2, h3, p, figure {
 }
 
 .section__head h2 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(1.6rem, 4vw, 2.2rem);
   margin-top: 0.5rem;
@@ -367,7 +410,7 @@ h1, h2, h3, p, figure {
 }
 
 .project-card__title {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 1.08rem;
 }
@@ -414,7 +457,7 @@ h1, h2, h3, p, figure {
 }
 
 .pull-quote {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 500;
   font-size: clamp(1.3rem, 3vw, 1.7rem);
   line-height: 1.35;
@@ -451,7 +494,7 @@ h1, h2, h3, p, figure {
 }
 
 .method-item h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 1.05rem;
 }
@@ -592,7 +635,7 @@ h1, h2, h3, p, figure {
 }
 
 .site-footer__brand {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: 1rem;
 }

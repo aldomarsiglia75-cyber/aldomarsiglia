@@ -179,14 +179,15 @@ h1, h2, h3, p, figure {
 
 .nav {
   display: flex;
-  gap: clamp(1rem, 3vw, 2rem);
+  align-items: flex-start;
+  gap: clamp(1.25rem, 3.5vw, 2.5rem);
 }
 
-.nav a {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.nav__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: 11.5rem;
   text-decoration: none;
   color: var(--stone);
   padding-bottom: 0.3rem;
@@ -194,11 +195,26 @@ h1, h2, h3, p, figure {
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.nav a:hover {
+.nav__title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nav__desc {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  color: var(--stone);
+}
+
+.nav__item:hover {
   color: var(--ink);
 }
 
-.nav a[aria-current="page"] {
+.nav__item[aria-current="page"] {
   color: var(--ink);
   border-bottom-color: var(--accent);
 }
@@ -251,7 +267,7 @@ h1, h2, h3, p, figure {
 .hero {
   position: relative;
   padding-top: clamp(3rem, 9vw, 6rem);
-  padding-bottom: clamp(3rem, 8vw, 5rem);
+  padding-bottom: clamp(7rem, 14vw, 9rem);
 }
 
 .hero__top {
@@ -296,6 +312,42 @@ h1, h2, h3, p, figure {
 
 .hero__actions .eyebrow {
   color: var(--stone);
+}
+
+/* colophon — blocco archivio in stile tavola tecnica, angolo dell'hero ------- */
+
+.colophon {
+  position: absolute;
+  left: var(--edge);
+  bottom: clamp(1.25rem, 4vw, 2.25rem);
+  display: grid;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  color: var(--stone);
+}
+
+.colophon__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.colophon__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+@media (max-width: 560px) {
+  .colophon {
+    position: static;
+    margin-top: 2.5rem;
+  }
 }
 
 /* ---- generic page header (non-home) ---------------------------------------- */
@@ -433,6 +485,38 @@ h1, h2, h3, p, figure {
 .project-card__year {
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  color: var(--stone);
+}
+
+.project-card__datum {
+  margin-top: 0.9rem;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.project-card__datum .project-card__year,
+.project-card__datum .project-card__place {
+  font-size: 0.72rem;
+}
+
+.project-card__datum .project-card__title {
+  font-size: 1.05rem;
+  margin: 0 0.1rem;
+}
+
+.project-card__datum + .project-card__category {
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.project-card__quote {
+  margin-top: 0.9rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--line-strong);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.5;
   color: var(--stone);
 }
 

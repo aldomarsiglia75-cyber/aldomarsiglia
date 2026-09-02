@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Progetti — Aldo Marsiglia</title>
+<title>Works — Aldo Marsiglia</title>
 <meta name="description" content="Progetti di architettura residenziale, interior design e spazi commerciali.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,9 +14,9 @@
     <a class="logo" href="index.html">A<span>M</span></a>
     <nav class="nav" aria-label="Navigazione principale">
       <a class="nav__item" href="index.html"><span class="nav__title">Home</span></a>
-      <a class="nav__item" href="progetti.html" aria-current="page"><span class="nav__title">01 Progetti</span><span class="nav__desc">Lavori accademici e professionali</span></a>
-      <a class="nav__item" href="chi-sono.html"><span class="nav__title">02 Chi sono</span><span class="nav__desc">Percorso e formazione</span></a>
-      <a class="nav__item" href="contatti.html"><span class="nav__title">03 Contatti</span></a>
+      <a class="nav__item" href="progetti.html" aria-current="page"><span class="nav__title">Works</span></a>
+      <a class="nav__item" href="chi-sono.html"><span class="nav__title">About</span></a>
+      <a class="nav__item" href="contatti.html"><span class="nav__title">Contacts</span></a>
     </nav>
   </div>
 </header>
@@ -27,8 +24,8 @@
 <main>
 
   <div class="page-header wrap">
-    <span class="eyebrow">Tav. 01 — Indice progetti</span>
-    <h1>Progetti</h1>
+    <span class="eyebrow">Tav. 01 — Works</span>
+    <h1>Works</h1>
     <p class="page-header__lead">Una selezione di lavori recenti tra architettura residenziale, interior design e spazi commerciali.</p>
     <p class="legend" style="margin-top: 1.2rem;">Residenziale · Interior Design · Commerciale · Ristrutturazione</p>
   </div>
@@ -36,90 +33,133 @@
   <div class="wrap"><div class="scale-rule"></div></div>
 
   <section class="section wrap">
-    <div class="project-grid">
+    <div class="works-toolbar">
+      <div class="view-switch" role="group" aria-label="Modalità di visualizzazione">
+        <button type="button" class="view-switch__btn" data-view="grid" aria-pressed="true">Griglia</button>
+        <button type="button" class="view-switch__btn" data-view="list" aria-pressed="false">Lista</button>
+      </div>
+    </div>
+
+    <div class="project-grid" data-project-grid data-view="grid">
 
       <a class="project-card" href="#">
         <div class="plate">
+          <img src="covers/01-intreccio.jpg" alt="Intreccio — prospetti" loading="lazy">
           <span class="corner corner--tl" aria-hidden="true"></span>
           <span class="corner corner--tr" aria-hidden="true"></span>
           <span class="corner corner--bl" aria-hidden="true"></span>
           <span class="corner corner--br" aria-hidden="true"></span>
           <span class="plate__code">P—001</span>
         </div>
-        <p class="project-card__datum"><span class="project-card__year">2025</span> — <span class="project-card__title">Villa sul Crinale</span> — <span class="project-card__place">Toscana, IT</span></p>
+        <h3 class="project-card__title">Intreccio</h3>
+        <p class="project-card__lab">Laboratorio di Progettazione 1 — I anno Triennale</p>
         <span class="project-card__category">Residenziale</span>
-        <p class="project-card__note">Nuova costruzione tra gli ulivi, vista aperta sulla valle.</p>
-        <p class="project-card__quote">[citazione qui]</p>
+        <p class="project-card__note">Casa bifamiliare: le scale delle due unità si intrecciano in un unico gesto distributivo.</p>
       </a>
 
       <a class="project-card" href="#">
         <div class="plate">
+          <img src="covers/02-koine.jpg" alt="Koinè — vista del cortile" loading="lazy">
           <span class="corner corner--tl" aria-hidden="true"></span>
           <span class="corner corner--tr" aria-hidden="true"></span>
           <span class="corner corner--bl" aria-hidden="true"></span>
           <span class="corner corner--br" aria-hidden="true"></span>
           <span class="plate__code">P—002</span>
         </div>
-        <p class="project-card__datum"><span class="project-card__year">2024</span> — <span class="project-card__title">Loft in Brera</span> — <span class="project-card__place">Milano, IT</span></p>
-        <span class="project-card__category">Interior Design</span>
-        <p class="project-card__note">Recupero di un loft industriale nel centro di Milano.</p>
-        <p class="project-card__quote">[citazione qui]</p>
+        <h3 class="project-card__title">Koinè</h3>
+        <p class="project-card__lab">Laboratorio finale — III anno Triennale</p>
+        <span class="project-card__category">Residenziale</span>
+        <p class="project-card__note">Social housing nel recupero di un ex oratorio.</p>
       </a>
 
       <a class="project-card" href="#">
         <div class="plate">
+          <img src="covers/03-spina-abitata.jpg" alt="Spina Abitata — la nuova spina vetrata" loading="lazy">
           <span class="corner corner--tl" aria-hidden="true"></span>
           <span class="corner corner--tr" aria-hidden="true"></span>
           <span class="corner corner--bl" aria-hidden="true"></span>
           <span class="corner corner--br" aria-hidden="true"></span>
           <span class="plate__code">P—003</span>
         </div>
-        <p class="project-card__datum"><span class="project-card__year">2024</span> — <span class="project-card__title">Show-room Via Tortona</span> — <span class="project-card__place">Milano, IT</span></p>
-        <span class="project-card__category">Commerciale</span>
-        <p class="project-card__note">Spazio espositivo per un brand di arredo.</p>
-        <p class="project-card__quote">[citazione qui]</p>
+        <h3 class="project-card__title">Spina Abitata</h3>
+        <p class="project-card__lab">Laboratorio di Costruzione — I anno Magistrale</p>
+        <span class="project-card__category">Ristrutturazione</span>
+        <p class="project-card__note">Una nuova spina — atrio e passerella laboratoriale — per superare le barriere architettoniche di una scuola esistente.</p>
       </a>
 
       <a class="project-card" href="#">
         <div class="plate">
+          <img src="covers/04-space.jpg" alt="S.P.A.C.E. — la nicchia benessere" loading="lazy">
           <span class="corner corner--tl" aria-hidden="true"></span>
           <span class="corner corner--tr" aria-hidden="true"></span>
           <span class="corner corner--bl" aria-hidden="true"></span>
           <span class="corner corner--br" aria-hidden="true"></span>
           <span class="plate__code">P—004</span>
         </div>
-        <p class="project-card__datum"><span class="project-card__year">2023</span> — <span class="project-card__title">Casa Colonica</span> — <span class="project-card__place">Toscana, IT</span></p>
-        <span class="project-card__category">Ristrutturazione</span>
-        <p class="project-card__note">Restauro conservativo di un rustico in Toscana.</p>
-        <p class="project-card__quote">[citazione qui]</p>
+        <h3 class="project-card__title">S.P.A.C.E.</h3>
+        <p class="project-card__lab">Laboratorio di Interni — I anno Magistrale</p>
+        <span class="project-card__category">Interior Design</span>
+        <p class="project-card__note">Un dispositivo per la salute moderna dentro un'abitazione milanese.</p>
       </a>
 
       <a class="project-card" href="#">
         <div class="plate">
+          <img src="covers/05-padiglione.jpg" alt="Padiglione — vista d'insieme" loading="lazy">
           <span class="corner corner--tl" aria-hidden="true"></span>
           <span class="corner corner--tr" aria-hidden="true"></span>
           <span class="corner corner--bl" aria-hidden="true"></span>
           <span class="corner corner--br" aria-hidden="true"></span>
           <span class="plate__code">P—005</span>
         </div>
-        <p class="project-card__datum"><span class="project-card__year">2023</span> — <span class="project-card__title">Appartamento Duomo</span> — <span class="project-card__place">Milano, IT</span></p>
-        <span class="project-card__category">Interior Design</span>
-        <p class="project-card__note">Riconfigurazione degli spazi per una famiglia di quattro persone.</p>
-        <p class="project-card__quote">[citazione qui]</p>
+        <h3 class="project-card__title">Padiglione</h3>
+        <p class="project-card__lab">Concorso — Fuorisalone 2026</p>
+        <span class="project-card__category">Commerciale</span>
+        <p class="project-card__note">Padiglione espositivo per il Fuorisalone 2026.</p>
       </a>
 
       <a class="project-card" href="#">
         <div class="plate">
+          <img src="covers/06-the-ie-series.jpg" alt="The IE Series — la cucina mobile" loading="lazy">
           <span class="corner corner--tl" aria-hidden="true"></span>
           <span class="corner corner--tr" aria-hidden="true"></span>
           <span class="corner corner--bl" aria-hidden="true"></span>
           <span class="corner corner--br" aria-hidden="true"></span>
           <span class="plate__code">P—006</span>
         </div>
-        <p class="project-card__datum"><span class="project-card__year">2022</span> — <span class="project-card__title">Boutique Concept Store</span> — <span class="project-card__place">Firenze, IT</span></p>
-        <span class="project-card__category">Commerciale</span>
-        <p class="project-card__note">Concept store per un marchio di moda indipendente.</p>
-        <p class="project-card__quote">[citazione qui]</p>
+        <h3 class="project-card__title">The IE Series</h3>
+        <p class="project-card__lab">Laboratorio di Interni — I anno Magistrale</p>
+        <span class="project-card__category">Interior Design</span>
+        <p class="project-card__note">Cucina mobile progettata sulle abitudini alimentari dei sei personaggi di Friends.</p>
+      </a>
+
+      <a class="project-card" href="#">
+        <div class="plate">
+          <img src="covers/07-promenade.jpg" alt="Promenade — il modello ligneo" loading="lazy">
+          <span class="corner corner--tl" aria-hidden="true"></span>
+          <span class="corner corner--tr" aria-hidden="true"></span>
+          <span class="corner corner--bl" aria-hidden="true"></span>
+          <span class="corner corner--br" aria-hidden="true"></span>
+          <span class="plate__code">P—007</span>
+        </div>
+        <h3 class="project-card__title">Promenade</h3>
+        <p class="project-card__lab">Laboratorio — II anno Triennale</p>
+        <span class="project-card__category">Residenziale</span>
+        <p class="project-card__note">Casa vacanze in Thailandia per un'artista: una promenade a picco sul lago, pensata come un nido.</p>
+      </a>
+
+      <a class="project-card" href="#">
+        <div class="plate">
+          <img src="covers/08-onoffline.jpg" alt="On:Off Line — l'angolo smart working" loading="lazy">
+          <span class="corner corner--tl" aria-hidden="true"></span>
+          <span class="corner corner--tr" aria-hidden="true"></span>
+          <span class="corner corner--bl" aria-hidden="true"></span>
+          <span class="corner corner--br" aria-hidden="true"></span>
+          <span class="plate__code">P—008</span>
+        </div>
+        <h3 class="project-card__title">On:Off Line</h3>
+        <p class="project-card__lab">Laboratorio di Interni — Magistrale</p>
+        <span class="project-card__category">Interior Design</span>
+        <p class="project-card__note">Un dispositivo che collega smart working e hobby personali in un appartamento milanese.</p>
       </a>
 
     </div>
@@ -131,11 +171,16 @@
   <div class="wrap">
     <div>
       <div class="site-footer__brand">Aldo Marsiglia</div>
-      <div class="site-footer__meta">Studio di Architettura &amp; Interior Design</div>
+      <div class="site-footer__meta">Portfolio / Archivio</div>
     </div>
-    <div class="site-footer__meta">© 2026 — <a href="contatti.html">Contatti</a></div>
+    <div class="site-footer__meta">© 2026 — <a href="contatti.html">Contacts</a></div>
   </div>
 </footer>
+
+<p class="colophon">Aggiornato — 02.09.2026</p>
+
+<script src="works-view.js"></script>
+<script src="cursor.js"></script>
 
 </body>
 </html>

@@ -102,11 +102,27 @@
   --grid-bg:
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  /* su schermi più larghi di --max il .wrap si centra e il suo bordo
+     sinistro cade a un offset che varia con continuità (non un multiplo
+     di --grid-unit): questa ri-sfasa il pattern perché una riga della
+     griglia coincida sempre col bordo del contenuto, a qualunque larghezza. */
+  --grid-x: calc(max(0px, (100vw - var(--max)) / 2) + var(--edge));
 
-  --gap: clamp(1.5rem, 3vw, 3rem);
-  --gap-lg: clamp(1.5rem, 6vw, 4.5rem);
-  --edge: clamp(1.5rem, 5vw, 4.5rem);
+  /* ritmo "a scatti": misure fisse per fascia di larghezza, non fluide —
+     ogni fascia resta un multiplo esatto di --grid-unit, la pagina scatta
+     alla fascia successiva invece di scalare morbidamente (vedi i due
+     @media in fondo al file che le ridefiniscono a 860px e 640px). */
+  --gap: 3rem;
+  --gap-lg: 4.5rem;
+  --edge: 4.5rem;
   --max: 76rem;
+
+  /* card immagine a modulo fisso, mai fluida: la larghezza è sempre un
+     multiplo esatto di --grid-unit e, essendo multipla di 4 moduli, anche
+     l'altezza in aspect-ratio 4/3 (o 3/4 per i ritratti) cade su un
+     multiplo intero — il riquadro occupa sempre un numero esatto di
+     quadretti, non sbora mai. */
+  --card-w: 18rem;
 }
 
 /* ---- journal: copertina invertita ---------------------------------------
@@ -145,6 +161,7 @@ body {
   background-color: var(--paper);
   background-image: var(--grid-bg);
   background-size: var(--grid-unit) var(--grid-unit);
+  background-position: var(--grid-x) 0;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
@@ -197,15 +214,6 @@ h1, h2, h3, p, figure {
   padding-right: var(--edge);
 }
 
-.eyebrow {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--stone);
-}
-
 /* scale-bar rule — divisore in stile barra di scala tecnica ---------------- */
 
 .scale-rule {
@@ -231,6 +239,7 @@ h1, h2, h3, p, figure {
   background-color: var(--paper);
   background-image: var(--grid-bg);
   background-size: var(--grid-unit) var(--grid-unit);
+  background-position: var(--grid-x) 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -258,7 +267,7 @@ h1, h2, h3, p, figure {
 .nav {
   display: flex;
   align-items: flex-start;
-  gap: clamp(1.25rem, 3.5vw, 2.5rem);
+  gap: 2.5rem;
 }
 
 .nav__item {
@@ -382,7 +391,7 @@ h1, h2, h3, p, figure {
   min-height: 82vh;
   display: flex;
   align-items: flex-end;
-  padding-bottom: clamp(3rem, 7vw, 4.5rem);
+  padding-bottom: 4.5rem;
 }
 
 .hero__title {
@@ -400,8 +409,8 @@ h1, h2, h3, p, figure {
 /* ---- generic page header (non-home) ---------------------------------------- */
 
 .page-header {
-  padding-top: clamp(3rem, 7vw, 4.5rem);
-  padding-bottom: clamp(1.5rem, 5vw, 3rem);
+  padding-top: 4.5rem;
+  padding-bottom: 3rem;
 }
 
 .page-header h1 {
@@ -423,8 +432,8 @@ h1, h2, h3, p, figure {
 /* ---- section shell ----------------------------------------------------------- */
 
 .section {
-  padding-top: clamp(3rem, 6vw, 4.5rem);
-  padding-bottom: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
 }
 
 .section__head {
@@ -588,7 +597,7 @@ h1, h2, h3, p, figure {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--card-w), 100%), var(--card-w)));
   gap: var(--gap);
 }
 
@@ -754,7 +763,7 @@ h1, h2, h3, p, figure {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 16.5rem 1fr;
+  grid-template-columns: var(--card-w) 1fr;
   gap: var(--gap-lg);
   align-items: start;
 }
@@ -847,7 +856,7 @@ h1, h2, h3, p, figure {
 
 .site-footer {
   border-top: 1px solid var(--line);
-  margin-top: clamp(3rem, 8vw, 4.5rem);
+  margin-top: 4.5rem;
   padding-top: 1.5rem;
   padding-bottom: 3rem;
 }
@@ -920,12 +929,35 @@ h1, h2, h3, p, figure {
 /* ---- responsive -------------------------------------------------------------------- */
 
 @media (max-width: 860px) {
-  .project-grid {
-    grid-template-columns: repeat(2, 1fr);
+  :root {
+    --edge: 3rem;
+    --gap: 2.25rem;
+    --gap-lg: 3rem;
   }
 
-  .about-grid,
-  .contact-grid {
+  .nav {
+    gap: 1.5rem;
+  }
+
+  .hero__inner {
+    padding-bottom: 3rem;
+  }
+
+  .page-header {
+    padding-top: 3rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .site-footer {
+    margin-top: 3rem;
+  }
+
+  .about-grid {
     grid-template-columns: 1fr;
   }
 
@@ -935,6 +967,30 @@ h1, h2, h3, p, figure {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --edge: 1.5rem;
+    --gap: 1.5rem;
+    --gap-lg: 1.5rem;
+  }
+
+  .hero__inner {
+    padding-bottom: 2.25rem;
+  }
+
+  .page-header {
+    padding-top: 2.25rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .section {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .site-footer {
+    margin-top: 2.25rem;
+  }
+
   .nav-toggle {
     display: inline-flex;
   }
@@ -952,6 +1008,7 @@ h1, h2, h3, p, figure {
     background-color: var(--paper);
     background-image: var(--grid-bg);
     background-size: var(--grid-unit) var(--grid-unit);
+    background-position: var(--grid-x) 0;
     border-bottom: 1px solid var(--line);
     transition: max-height 0.25s ease;
   }
@@ -970,11 +1027,5 @@ h1, h2, h3, p, figure {
 
   .nav__item:first-child {
     border-top: none;
-  }
-}
-
-@media (max-width: 560px) {
-  .project-grid {
-    grid-template-columns: 1fr;
   }
 }

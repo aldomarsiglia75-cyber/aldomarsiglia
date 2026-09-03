@@ -85,10 +85,10 @@
   --accent: #0022ff;
   --accent-hover: #0019b3;
 
-  --font-display: "A Matter", Georgia, serif;
+  --font-display: "Neue Haas Display", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Neue Haas Display", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "Neue Haas Display", "Helvetica Neue", Arial, sans-serif;
-  --track-tight: -0.4em;
+  --track-tight: -0.02em;
 
   --gap: clamp(1.25rem, 3vw, 2.5rem);
   --edge: clamp(1.25rem, 5vw, 4rem);

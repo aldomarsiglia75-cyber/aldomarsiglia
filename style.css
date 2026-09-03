@@ -395,6 +395,46 @@ h1, h2, h3, p, figure {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: grayscale(1) brightness(var(--tint-brightness, 1)) contrast(var(--tint-contrast, 1.1));
+  transition: filter 0.5s ease;
+}
+
+/* luminosità/contrasto del duotono calibrati sulla luminosità media reale di ogni foto:
+   le foto scure si schiariscono, quelle chiare/piatte si scuriscono e prendono contrasto,
+   invece di applicare a tutte lo stesso taglio fisso. */
+.plate img[src*="02-koine"] { --tint-brightness: 0.92; --tint-contrast: 1.2; }
+.plate img[src*="03-spina-abitata"] { --tint-brightness: 0.98; --tint-contrast: 1.06; }
+.plate img[src*="04-space"] { --tint-brightness: 1.45; --tint-contrast: 0.95; }
+.plate img[src*="05-padiglione"] { --tint-brightness: 1.2; --tint-contrast: 0.95; }
+.plate img[src*="06-the-ie-series"] { --tint-brightness: 1.2; --tint-contrast: 0.95; }
+.plate img[src*="07-promenade"] { --tint-brightness: 0.85; --tint-contrast: 1.35; }
+
+.plate__tint {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: color;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.plate__tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: multiply;
+  opacity: 0.28;
+}
+
+.project-card:hover .plate img,
+.project-card:focus-visible .plate img {
+  filter: none;
+}
+
+.project-card:hover .plate__tint,
+.project-card:focus-visible .plate__tint {
+  opacity: 0;
 }
 
 .plate--portrait {

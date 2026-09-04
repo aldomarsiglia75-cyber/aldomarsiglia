@@ -114,7 +114,8 @@
      @media in fondo al file che le ridefiniscono a 860px e 640px). */
   --gap: 3rem;
   --gap-lg: 4.5rem;
-  --edge: 4.5rem;
+  /* margine laterale fisso a 4 quadretti esatti */
+  --edge: 6rem;
   --max: 76rem;
 
   /* card immagine a modulo fisso, mai fluida: la larghezza è sempre un
@@ -165,7 +166,9 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.55;
+  /* 1.5 × 16px = 24px = esattamente --grid-unit: ogni riga di testo occupa
+     una riga di griglia intera invece di scavalcarla di qualche decimo. */
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -240,15 +243,20 @@ h1, h2, h3, p, figure {
   background-image: var(--grid-bg);
   background-size: var(--grid-unit) var(--grid-unit);
   background-position: var(--grid-x) 0;
-  border-bottom: 1px solid var(--line);
+  /* box-shadow invece di border-bottom: non aggiunge altezza al box, così
+     l'header resta esattamente 4 quadretti e non 4 quadretti + 1px. */
+  box-shadow: inset 0 -1px 0 var(--line);
 }
 
 .site-header .wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  /* padding fisso a 1 quadretto sopra e sotto: sommato all'altezza fissa
+     della pillola nav (2 quadretti), l'header viene sempre 4 quadretti
+     esatti, così il suo bordo inferiore cade su una riga della griglia. */
+  padding-top: var(--grid-unit);
+  padding-bottom: var(--grid-unit);
 }
 
 .logo {
@@ -266,19 +274,22 @@ h1, h2, h3, p, figure {
 
 .nav {
   display: flex;
-  align-items: flex-start;
-  gap: 2.5rem;
+  align-items: center;
+  gap: 2.25rem;
 }
 
 .nav__item {
+  /* altezza fissa di 2 quadretti (invece di un padding attorno al testo):
+     così il riquadro blu della pillola non dipende dai metrics del font
+     e i suoi bordi cadono sempre su due righe della griglia, non a metà. */
   display: flex;
   align-items: center;
+  height: calc(var(--grid-unit) * 2);
   text-decoration: none;
   color: var(--stone);
-  padding: 0.5rem 0.75rem;
-  margin: -0.5rem -0.75rem;
+  padding: 0 0.75rem;
   border: 1px solid transparent;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
@@ -301,14 +312,15 @@ h1, h2, h3, p, figure {
 /* ---- nav toggle: hamburger per schermi stretti -------------------------- */
 
 .nav-toggle {
+  /* stesso modulo di 2 quadretti della pillola nav, per restare sulla griglia */
   display: none;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: calc(var(--grid-unit) * 2);
+  height: calc(var(--grid-unit) * 2);
   padding: 0;
   border: 1px solid var(--line-strong);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   background: transparent;
   cursor: pointer;
 }
@@ -493,6 +505,7 @@ h1, h2, h3, p, figure {
 /* luminosità/contrasto del duotono calibrati sulla luminosità media reale di ogni foto:
    le foto scure si schiariscono, quelle chiare/piatte si scuriscono e prendono contrasto,
    invece di applicare a tutte lo stesso taglio fisso. */
+.plate img[src*="01-intreccio"] { --tint-brightness: 0.82; --tint-contrast: 1.3; }
 .plate img[src*="02-koine"] { --tint-brightness: 0.92; --tint-contrast: 1.2; }
 .plate img[src*="03-spina-abitata"] { --tint-brightness: 0.98; --tint-contrast: 1.06; }
 .plate img[src*="04-space"] { --tint-brightness: 1.45; --tint-contrast: 0.95; }
@@ -569,6 +582,10 @@ h1, h2, h3, p, figure {
 }
 
 .view-switch__btn {
+  /* altezza fissa di 1 quadretto, come le altre pillole/badge del sito */
+  display: inline-flex;
+  align-items: center;
+  height: var(--grid-unit);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
@@ -577,7 +594,7 @@ h1, h2, h3, p, figure {
   background: transparent;
   border: 1px solid var(--line-strong);
   border-radius: 0.5rem;
-  padding: 0.375rem 0.75rem;
+  padding: 0 0.75rem;
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
@@ -598,6 +615,12 @@ h1, h2, h3, p, figure {
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(var(--card-w), 100%), var(--card-w)));
+  /* le colonne restano a larghezza fissa (--card-w, mai fluida) ma lo spazio
+     avanzato nella riga — invece di restare vuoto a destra — si distribuisce
+     nei gap tra le card, che restano sempre almeno --gap: la riga occupa
+     sempre tutta la larghezza disponibile, dal margine sinistro a quello
+     destro, invece di restare ammassata a sinistra. */
+  justify-content: space-between;
   gap: var(--gap);
 }
 
@@ -723,7 +746,9 @@ h1, h2, h3, p, figure {
 }
 
 .project-card__category {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  height: var(--grid-unit);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.05em;
@@ -731,7 +756,7 @@ h1, h2, h3, p, figure {
   color: #fff;
   background: var(--accent);
   border-radius: 999px;
-  padding: 0.25rem 0.75rem;
+  padding: 0 0.75rem;
   white-space: nowrap;
 }
 
@@ -792,13 +817,16 @@ h1, h2, h3, p, figure {
 }
 
 .tag {
+  display: inline-flex;
+  align-items: center;
+  height: var(--grid-unit);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink);
   border: 1px solid var(--line-strong);
-  padding: 0.375rem 0.75rem;
+  padding: 0 0.75rem;
 }
 
 /* ---- contatti: blocco a fondo pagina About ---------------------------------------- */
@@ -930,7 +958,7 @@ h1, h2, h3, p, figure {
 
 @media (max-width: 860px) {
   :root {
-    --edge: 3rem;
+    --edge: 4.5rem;
     --gap: 2.25rem;
     --gap-lg: 3rem;
   }
@@ -968,7 +996,7 @@ h1, h2, h3, p, figure {
 
 @media (max-width: 640px) {
   :root {
-    --edge: 1.5rem;
+    --edge: 3rem;
     --gap: 1.5rem;
     --gap-lg: 1.5rem;
   }
@@ -1018,8 +1046,11 @@ h1, h2, h3, p, figure {
   }
 
   .nav__item {
-    margin: 0;
-    padding: 1rem var(--edge);
+    /* qui non è più una pillola ma una riga a piena larghezza: l'altezza
+       torna libera (2 quadretti = 3rem di padding verticale complessivo). */
+    height: auto;
+    justify-content: flex-start;
+    padding: 0.75rem var(--edge);
     border: none;
     border-top: 1px solid var(--line);
     border-radius: 0;

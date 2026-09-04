@@ -9,102 +9,99 @@
 </head>
 <body>
 
-<header class="site-header">
-  <div class="wrap">
-    <a class="logo" href="index.html">A<span>M</span></a>
-    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Apri il menu">
-      <span class="nav-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
-    </button>
-    <nav class="nav" id="site-nav" aria-label="Navigazione principale">
-      <a class="nav__item" href="index.html" aria-current="page"><span class="nav__title">Home</span></a>
-      <a class="nav__item" href="progetti.html"><span class="nav__title">Works</span></a>
-      <a class="nav__item" href="chi-sono.html"><span class="nav__title">About</span></a>
-      <a class="nav__item" href="journal.html"><span class="nav__title">Journal</span></a>
-    </nav>
-  </div>
-</header>
-
 <main>
 
-  <section class="hero-intro">
-    <div class="hero-intro__frame">
-      <img src="covers/01-intreccio.jpg" alt="" loading="eager">
-    </div>
-    <div class="hero-intro__foot">
-      <h1 class="hero-intro__name">Aldo Marsiglia</h1>
-      <span class="hero-intro__scroll">Scroll &amp; Discover</span>
-    </div>
+  <section class="intro">
+    <h1 class="intro__name">
+      <span class="intro__letter">A</span><span class="intro__letter">l</span><span class="intro__letter">d</span><span class="intro__letter">o</span><br>
+      <span class="intro__letter">M</span><span class="intro__letter">a</span><span class="intro__letter">r</span><span class="intro__letter">s</span><span class="intro__letter">i</span><span class="intro__letter">g</span><span class="intro__letter">l</span><span class="intro__letter">i</span><span class="intro__letter">a</span>
+    </h1>
   </section>
 
-  <section class="h-gallery" aria-label="Una selezione di progetti">
-    <div class="h-gallery__pin">
-      <div class="h-gallery__viewport">
-        <div class="h-gallery__track">
+  <nav class="site-nav" aria-label="Navigazione principale">
+    <div class="wrap site-nav__inner">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="progetti.html">Works</a>
+      <a href="journal.html">Journal</a>
+      <a href="#contatti">Contacts</a>
+    </div>
+  </nav>
 
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">01</span>
-            <img src="covers/01-intreccio.jpg" alt="Intreccio" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">Intreccio</span>
-          </a>
+  <section class="about" id="about">
+    <div class="wrap about__grid">
 
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">02</span>
-            <img src="covers/02-koine.jpg" alt="Koinè" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">Koinè</span>
-          </a>
+      <div class="about__col">
+        <h2 class="about__label">Chi sono</h2>
+        <p>Sono Aldo Marsiglia, 22 anni. Ho conseguito la laurea triennale in Progettazione dell'Architettura al Politecnico di Milano e sto proseguendo con la laurea magistrale in Architettura e Spazio Interno, sempre al Politecnico.</p>
+        <p>Mi occupo di progettazione residenziale e di interni, con un'attenzione particolare a luce naturale, materiali e modo d'uso reale degli spazi — dal rilievo al concept, fino alla rappresentazione tecnica del progetto.</p>
+      </div>
 
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">03</span>
-            <img src="covers/03-spina-abitata.jpg" alt="Spina Abitata" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">Spina Abitata</span>
-          </a>
+      <div class="about__col">
+        <h2 class="about__label">Formazione</h2>
+        <div class="timeline">
+          <div class="timeline__row">
+            <span class="timeline__date">2025 —</span>
+            <span>Politecnico di Milano — Laurea Magistrale, Architettura e Spazio Interno</span>
+          </div>
+          <div class="timeline__row">
+            <span class="timeline__date">2022–25</span>
+            <span>Politecnico di Milano — Laurea Triennale, Progettazione dell'Architettura</span>
+          </div>
+          <div class="timeline__row">
+            <span class="timeline__date">2017–22</span>
+            <span>Liceo Classico e Musicale "Empedocle"</span>
+          </div>
+        </div>
+        <p class="about__note">Extra — Progetto del Prodotto d'Arredo, Prof. Michele Marelli, Politecnico di Milano (09/2024–01/2025)</p>
+      </div>
 
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">04</span>
-            <img src="covers/04-space.jpg" alt="S.P.A.C.E." loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">S.P.A.C.E.</span>
-          </a>
-
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">05</span>
-            <img src="covers/05-padiglione.jpg" alt="Padiglione" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">Padiglione</span>
-          </a>
-
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">06</span>
-            <img src="covers/06-the-ie-series.jpg" alt="The IE Series" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">The IE Series</span>
-          </a>
-
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">07</span>
-            <img src="covers/07-promenade.jpg" alt="Promenade" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">Promenade</span>
-          </a>
-
-          <a class="h-gallery__item" href="progetti.html">
-            <span class="h-gallery__index">08</span>
-            <img src="covers/08-onoffline.jpg" alt="On/Off Line" loading="lazy">
-            <span class="h-gallery__tint" aria-hidden="true"></span>
-            <span class="h-gallery__name">On/Off Line</span>
-          </a>
-
+      <div class="about__col">
+        <h2 class="about__label">Competenze</h2>
+        <div class="tag-list">
+          <span class="tag">AutoCAD</span>
+          <span class="tag">Revit</span>
+          <span class="tag">SketchUp</span>
+          <span class="tag">Rhinoceros</span>
+          <span class="tag">V-Ray</span>
+          <span class="tag">Lumion</span>
+          <span class="tag">D5 Render</span>
+          <span class="tag">Twinmotion</span>
+          <span class="tag">Adobe Creative Suite</span>
+          <span class="tag">Rilievo laser</span>
         </div>
       </div>
 
-      <a class="h-gallery__rail h-gallery__rail--right" href="progetti.html">
-        <span>Works</span>
-      </a>
+    </div>
 
-      <div class="h-gallery__progress"><span class="h-gallery__progress-fill"></span></div>
+    <div class="wrap">
+      <blockquote class="pull-quote">
+        <p>God is in the details.</p>
+        <cite>— Mies van der Rohe</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section wrap" id="contatti">
+    <h2 class="subhead">Contatti</h2>
+    <div class="contact-grid" style="margin-top: 1.5rem;">
+      <div class="contact-list">
+        <div class="contact-list__row">
+          <span class="contact-list__label">Nome</span>
+          <span>Aldo Marsiglia</span>
+        </div>
+        <div class="contact-list__row">
+          <span class="contact-list__label">Email</span>
+          <span><a href="mailto:aldomarsiglia75@gmail.com">aldomarsiglia75@gmail.com</a></span>
+        </div>
+        <div class="contact-list__row">
+          <span class="contact-list__label">Sede</span>
+          <span>Milano</span>
+        </div>
+      </div>
+      <div class="social-row">
+        <a href="https://www.instagram.com/aldomarsiglia_/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://pin.it/Y6C967QTH" target="_blank" rel="noopener">Pinterest</a>
+      </div>
     </div>
   </section>
 
@@ -116,15 +113,13 @@
       <div class="site-footer__brand">Aldo Marsiglia</div>
       <div class="site-footer__meta">Portfolio / Archivio</div>
     </div>
-    <div class="site-footer__meta">© 2026 — <a href="chi-sono.html#contatti">Contacts</a></div>
+    <div class="site-footer__meta">© 2026 — <a href="#contatti">Contacts</a></div>
   </div>
 </footer>
 
 <p class="colophon">Aggiornato — 04.09.2026</p>
 
-<script src="nav-toggle.js"></script>
 <script src="cursor.js"></script>
-<script src="home-gallery.js"></script>
 
 </body>
 </html>

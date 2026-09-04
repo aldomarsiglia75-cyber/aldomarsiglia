@@ -282,18 +282,14 @@ h1, h2, h3, p, figure {
 }
 
 .nav__item {
-  /* altezza fissa di 2 quadretti (invece di un padding attorno al testo):
-     così il riquadro blu della pillola non dipende dai metrics del font
-     e i suoi bordi cadono sempre su due righe della griglia, non a metà. */
+  /* altezza fissa di 2 quadretti: non più una pillola col riquadro, ma
+     l'altezza resta utile per il target di click e per i conti dell'header. */
   display: flex;
   align-items: center;
   height: calc(var(--grid-unit) * 2);
   text-decoration: none;
   color: var(--stone);
-  padding: 0 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.75rem;
-  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease;
 }
 
 .nav__title {
@@ -306,10 +302,14 @@ h1, h2, h3, p, figure {
 .nav__item:hover,
 .nav__item:focus-visible,
 .nav__item[aria-current="page"] {
-  color: #fff;
-  border-color: var(--accent);
-  background: var(--accent);
+  color: var(--accent);
   outline: none;
+}
+
+.nav__item:hover .nav__title,
+.nav__item:focus-visible .nav__title,
+.nav__item[aria-current="page"] .nav__title {
+  font-weight: 700;
 }
 
 /* ---- nav toggle: hamburger per schermi stretti -------------------------- */
@@ -392,34 +392,206 @@ h1, h2, h3, p, figure {
   border-color: var(--accent);
 }
 
-/* ---- hero: home — sfondo pieno rosso, titolo enorme (Figma) -- */
+/* ---- hero-intro: home — schermata d'apertura ispirata a 9to5studio.it -----------
+   immagine fluttuante al centro, testo introduttivo in basso a sinistra,
+   "Scroll & Discover" in basso a destra. Stessa struttura del riferimento,
+   ma con i nostri colori (quaderno bianco/rosso) al posto del blocco giallo. */
 
-.hero {
+.hero-intro {
   position: relative;
+  min-height: calc(100vh - 6rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 3rem var(--edge);
 }
 
-.hero--home {
-  color: var(--ink);
+.hero-intro__frame {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12rem;
 }
 
-.hero__inner {
-  min-height: 82vh;
+.hero-intro__frame img {
+  width: 15rem;
+  height: 15rem;
+  object-fit: cover;
+  filter: grayscale(1) brightness(0.82) contrast(1.3);
+}
+
+.hero-intro__foot {
   display: flex;
   align-items: flex-end;
-  padding-bottom: 4.5rem;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-.hero__title {
+.hero-intro__name {
   font-family: var(--font-display);
   font-weight: 700;
   color: var(--ink);
   text-transform: uppercase;
-  font-size: clamp(3rem, 9vw, 8rem);
-  line-height: 0.95;
   letter-spacing: var(--track-tight);
-  max-width: 20ch;
+  font-size: 3rem;
+  line-height: 3rem;
   margin: 0;
 }
+
+.hero-intro__scroll {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+  white-space: nowrap;
+}
+
+/* ---- h-gallery: galleria orizzontale a scroll agganciato, con corsie fisse ------- */
+
+.h-gallery {
+  position: relative;
+  background: var(--paper);
+}
+
+.h-gallery__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+}
+
+.h-gallery__rail {
+  flex: 0 0 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.h-gallery__rail span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.h-gallery__rail:hover,
+.h-gallery__rail:focus-visible {
+  background: var(--accent);
+  outline: none;
+}
+
+.h-gallery__viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.h-gallery__track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+.h-gallery__item {
+  position: relative;
+  flex: 0 0 55vw;
+  height: 100%;
+  overflow: hidden;
+  text-decoration: none;
+  border-right: 1px solid var(--paper);
+}
+
+.h-gallery__item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(var(--tint-brightness, 1)) contrast(var(--tint-contrast, 1.1));
+  transition: filter 0.4s ease;
+}
+
+.h-gallery__tint {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+
+.h-gallery__tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: multiply;
+  opacity: 0.28;
+}
+
+.h-gallery__item:hover img,
+.h-gallery__item:focus-visible img {
+  filter: none;
+}
+
+.h-gallery__item:hover .h-gallery__tint,
+.h-gallery__item:focus-visible .h-gallery__tint {
+  opacity: 0;
+}
+
+.h-gallery__index {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: #fff;
+  z-index: 1;
+}
+
+.h-gallery__name {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--track-tight);
+  font-size: 1.1rem;
+  color: #fff;
+  z-index: 1;
+}
+
+.h-gallery__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--line);
+}
+
+.h-gallery__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+}
+
 
 /* ---- generic page header (non-home) ---------------------------------------- */
 
@@ -433,7 +605,10 @@ h1, h2, h3, p, figure {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--track-tight);
-  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  /* dimensione fissa a scatti: line-height costante a 2 quadretti (48px) a
+     ogni fascia, solo il font-size scende con lo schermo. */
+  font-size: 2.75rem;
+  line-height: 3rem;
   margin-top: 1rem;
 }
 
@@ -465,7 +640,9 @@ h1, h2, h3, p, figure {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--track-tight);
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  /* dimensione fissa a scatti: line-height costante a 2 quadretti (48px). */
+  font-size: 2.25rem;
+  line-height: 3rem;
   margin-top: 0.5rem;
 }
 
@@ -508,13 +685,13 @@ h1, h2, h3, p, figure {
 /* luminosità/contrasto del duotono calibrati sulla luminosità media reale di ogni foto:
    le foto scure si schiariscono, quelle chiare/piatte si scuriscono e prendono contrasto,
    invece di applicare a tutte lo stesso taglio fisso. */
-.plate img[src*="01-intreccio"] { --tint-brightness: 0.82; --tint-contrast: 1.3; }
-.plate img[src*="02-koine"] { --tint-brightness: 0.92; --tint-contrast: 1.2; }
-.plate img[src*="03-spina-abitata"] { --tint-brightness: 0.98; --tint-contrast: 1.06; }
-.plate img[src*="04-space"] { --tint-brightness: 1.45; --tint-contrast: 0.95; }
-.plate img[src*="05-padiglione"] { --tint-brightness: 1.2; --tint-contrast: 0.95; }
-.plate img[src*="06-the-ie-series"] { --tint-brightness: 1.2; --tint-contrast: 0.95; }
-.plate img[src*="07-promenade"] { --tint-brightness: 0.85; --tint-contrast: 1.35; }
+.plate img[src*="01-intreccio"], .h-gallery__item img[src*="01-intreccio"] { --tint-brightness: 0.82; --tint-contrast: 1.3; }
+.plate img[src*="02-koine"], .h-gallery__item img[src*="02-koine"] { --tint-brightness: 0.92; --tint-contrast: 1.2; }
+.plate img[src*="03-spina-abitata"], .h-gallery__item img[src*="03-spina-abitata"] { --tint-brightness: 0.98; --tint-contrast: 1.06; }
+.plate img[src*="04-space"], .h-gallery__item img[src*="04-space"] { --tint-brightness: 1.45; --tint-contrast: 0.95; }
+.plate img[src*="05-padiglione"], .h-gallery__item img[src*="05-padiglione"] { --tint-brightness: 1.2; --tint-contrast: 0.95; }
+.plate img[src*="06-the-ie-series"], .h-gallery__item img[src*="06-the-ie-series"] { --tint-brightness: 1.2; --tint-contrast: 0.95; }
+.plate img[src*="07-promenade"], .h-gallery__item img[src*="07-promenade"] { --tint-brightness: 0.85; --tint-contrast: 1.35; }
 
 .plate__tint {
   position: absolute;
@@ -883,6 +1060,56 @@ h1, h2, h3, p, figure {
   border-bottom-color: var(--accent);
 }
 
+/* ---- journal strip: carosello orizzontale per le anteprime A.matter -------------- */
+
+.journal-strip {
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+.journal-slide {
+  flex: 0 0 auto;
+  width: 15rem;
+  display: block;
+}
+
+.journal-slide img {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  scroll-snap-align: start;
+}
+
+.journal-video {
+  flex: 0 0 auto;
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scroll-snap-align: start;
+}
+
+.journal-video video {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  background: #000;
+  border: 1px solid var(--line);
+}
+
+.journal-video__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
 /* ---- footer ---------------------------------------------------------------------- */
 
 .site-footer {
@@ -970,13 +1197,26 @@ h1, h2, h3, p, figure {
     gap: 1.5rem;
   }
 
-  .hero__inner {
-    padding-bottom: 3rem;
+  .hero-intro__frame img {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .h-gallery__item {
+    flex-basis: 75vw;
   }
 
   .page-header {
     padding-top: 3rem;
     padding-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.25rem;
+  }
+
+  .section__head h2 {
+    font-size: 2rem;
   }
 
   .section {
@@ -1004,13 +1244,62 @@ h1, h2, h3, p, figure {
     --gap-lg: 1.5rem;
   }
 
-  .hero__inner {
-    padding-bottom: 2rem;
+  .hero-intro {
+    gap: 2rem;
+    padding: 2rem var(--edge);
+  }
+
+  .hero-intro__frame img {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .hero-intro__foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* sotto i 640px la galleria smette di "agganciare" lo scroll verticale:
+     diventa una striscia normale che scorre in orizzontale col dito. */
+  .h-gallery__pin {
+    position: static;
+    height: auto;
+  }
+
+  .h-gallery__rail {
+    display: none;
+  }
+
+  .h-gallery__viewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .h-gallery__track {
+    height: 70vh;
+    transform: none !important;
+  }
+
+  .h-gallery__item {
+    flex-basis: 85vw;
+  }
+
+  .h-gallery__progress {
+    display: none;
   }
 
   .page-header {
     padding-top: 2rem;
     padding-bottom: 1.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .section__head h2 {
+    font-size: 1.75rem;
   }
 
   .section {
@@ -1049,14 +1338,12 @@ h1, h2, h3, p, figure {
   }
 
   .nav__item {
-    /* qui non è più una pillola ma una riga a piena larghezza: l'altezza
-       torna libera (2 quadretti = 3rem di padding verticale complessivo). */
+    /* qui è una riga a piena larghezza: l'altezza torna libera
+       (2 quadretti = 3rem di padding verticale complessivo). */
     height: auto;
     justify-content: flex-start;
     padding: 1rem var(--edge);
-    border: none;
     border-top: 1px solid var(--line);
-    border-radius: 0;
   }
 
   .nav__item:first-child {

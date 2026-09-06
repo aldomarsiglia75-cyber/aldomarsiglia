@@ -1160,3 +1160,340 @@ h1, h2, h3, p, figure, blockquote {
     gap: 0.5rem;
   }
 }
+
+/* ---- project-detail: pagina di singolo progetto -------------------------
+   Pannello descrittivo fisso a sinistra (title, etichette, specifiche) che
+   non scorre mai, nemmeno sotto i 640px. A destra gli elaborati (foto del
+   modello, poi disegni 2D) scorrono in orizzontale agganciati allo scroll
+   verticale — stessa meccanica pin/track/progress di .h-gallery, applicata
+   in orizzontale invece che alla griglia Works. Ogni elaborato è largo
+   quanto la propria immagine alla piena altezza disponibile (vedi lo style
+   inline flex-basis in pagina): niente ritagli, niente margini bianchi,
+   qualunque sia il formato (orizzontale, verticale, un foglio di prospetti
+   impilati). Il rosso resta uno stato interattivo, non decorazione: l'unico
+   elemento rosso è il puntino di fase attivo nel pannello. */
+
+.project-detail__panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(34vw, 30rem);
+  min-width: 19rem;
+  padding: 2rem 2rem 1.6rem;
+  background: var(--paper);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  z-index: 5;
+}
+
+.project-detail__back {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--stone);
+  text-decoration: none;
+  align-self: flex-start;
+  transition: color 0.15s ease;
+}
+
+.project-detail__back:hover,
+.project-detail__back:focus-visible {
+  color: var(--accent);
+}
+
+.project-detail__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.project-detail__title {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 3.4vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.project-detail__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--stone);
+}
+
+.project-detail__chip {
+  display: inline-block;
+  padding: 0.28em 0.85em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.project-detail__desc {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 32ch;
+}
+
+.project-detail__specs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  font-size: 0.82rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+}
+
+.project-detail__specs dt {
+  color: var(--stone);
+}
+
+.project-detail__specs dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.project-detail__spacer {
+  flex: 1;
+  min-height: 1rem;
+}
+
+.project-detail__tracker {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.project-detail__tracker-phases {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.project-detail__tracker-phase {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.25s ease;
+}
+
+.project-detail__tracker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.project-detail__tracker-phase.is-active {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.project-detail__tracker-phase.is-active .project-detail__tracker-dot {
+  background: var(--accent);
+  transform: scale(1.6);
+}
+
+.project-detail__tracker-now {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  min-height: 2.4rem;
+}
+
+.project-detail__tracker-num {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.project-detail__tracker-label {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  transition: opacity 0.18s ease;
+}
+
+/* ---- right side: scroll-jacked horizontal track, same mechanic as
+   .h-gallery — a tall spacer holds a sticky pin, the vertical scroll
+   position drives a translateX on the track plus a progress bar. */
+
+.project-detail__stream {
+  position: relative;
+  margin-left: min(34vw, 30rem);
+  width: min(66vw, calc(100% - 19rem));
+}
+
+@media (min-width: 1900px) {
+  .project-detail__stream {
+    width: calc(100% - 30rem);
+  }
+}
+
+.project-detail__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+}
+
+.project-detail__viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-detail__track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+/* ogni .project-detail__stage porta la propria --ratio inline (vedi pagina):
+   aspect-ratio deriva la larghezza dall'altezza reale disponibile, qualunque
+   essa sia (100vh in modalità pin, 60vh nel fallback sotto i 640px) — così
+   ogni elaborato riempie il pannello senza ritaglio e senza bordo bianco,
+   a qualunque altezza si trovi a renderizzare, invece di assumere 100vh. */
+.project-detail__stage {
+  position: relative;
+  flex: 0 0 auto;
+  height: 100%;
+  aspect-ratio: var(--ratio, 1.5);
+  border-right: 1px solid var(--line);
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.project-detail__stage img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* foto modello: bianco/nero come le card della griglia Works, a colori solo
+   quando è l'elaborato attivo nello scroll */
+.project-detail__stage[data-phase="foto"] img {
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.5s ease;
+}
+
+.project-detail__stage.is-active[data-phase="foto"] img {
+  filter: grayscale(0) contrast(1);
+}
+
+.project-detail__progress {
+  position: fixed;
+  left: min(34vw, 30rem);
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--line);
+  z-index: 4;
+}
+
+.project-detail__progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+}
+
+.project-detail__end {
+  flex: 0 0 26vw;
+  min-width: 18rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 3rem;
+  color: var(--stone);
+  font-size: 0.85rem;
+}
+
+.project-detail__end p {
+  max-width: 30ch;
+}
+
+@media (max-width: 860px) {
+  /* il pannello resta fisso e non si trasforma: si restringe soltanto */
+  .project-detail__panel {
+    width: 15rem;
+    min-width: 0;
+    padding: 1.4rem 1.1rem 1rem;
+    gap: 1rem;
+  }
+
+  .project-detail__title {
+    font-size: 1.5rem;
+  }
+
+  .project-detail__desc,
+  .project-detail__specs {
+    display: none;
+  }
+
+  .project-detail__tracker-phases {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .project-detail__stream {
+    margin-left: 15rem;
+    width: calc(100% - 15rem);
+  }
+
+  .project-detail__progress {
+    left: 15rem;
+  }
+
+  .project-detail__end {
+    flex-basis: 70vw;
+  }
+}
+
+@media (max-width: 640px) {
+  /* stessa soglia e stessa semplificazione di .h-gallery: sotto i 640px lo
+     scroll-jack via JS si disattiva (vedi mq in project-detail.js) e il
+     track prende un'altezza fissa più bassa invece di 100vh. */
+  .project-detail__track {
+    height: 60vh;
+    transform: none !important;
+  }
+
+  .project-detail__progress {
+    display: none;
+  }
+}

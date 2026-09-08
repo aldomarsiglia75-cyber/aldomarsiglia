@@ -7,9 +7,18 @@
   var numEl = document.querySelector('[data-project-num]');
   var labelEl = document.querySelector('[data-project-label]');
   var phaseEls = Array.prototype.slice.call(document.querySelectorAll('[data-project-phases] .project-detail__tracker-phase'));
+  var nav = document.querySelector('.site-nav');
   var total = stages.length;
 
   if (!section || !track || !viewport || !total) return;
+
+  // la nav non è sticky (scompare scorrendo), ma all'inizio pagina occupa
+  // spazio reale sopra al pannello (che è fixed e altrimenti partirebbe
+  // da y:0, sovrapponendosi) — l'altezza pinnata reale è window.innerHeight
+  // meno l'altezza della nav, misurata a runtime.
+  function pinnedViewportHeight() {
+    return window.innerHeight - (nav ? nav.offsetHeight : 0);
+  }
 
   // il browser a volte ripristina uno scroll salvato da una pagina progetto
   // precedente (altezza diversa): ogni pagina deve sempre partire dal primo
@@ -59,7 +68,7 @@
       return;
     }
     var extra = Math.max(0, track.scrollWidth - viewport.clientWidth);
-    section.style.height = (window.innerHeight + extra) + 'px';
+    section.style.height = (pinnedViewportHeight() + extra) + 'px';
   }
 
   function onScroll() {
@@ -67,7 +76,7 @@
     if (raf) return;
     raf = requestAnimationFrame(function () {
       raf = null;
-      var scrollable = section.offsetHeight - window.innerHeight;
+      var scrollable = section.offsetHeight - pinnedViewportHeight();
       var progressed = -section.getBoundingClientRect().top;
       var fraction = scrollable > 0 ? Math.min(1, Math.max(0, progressed / scrollable)) : 0;
       var maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);

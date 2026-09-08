@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVA — Home (da export Figma)</title>
+<style>
+  @font-face {
+    font-family: "Alte Haas Grotesk";
+    src: url("fonts/AlteHaasGroteskRegular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Alte Haas Grotesk";
+    src: url("fonts/AlteHaasGroteskBold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  :root {
+    --paper: #f8f8f8;
+    --ink: #2f2f2f;
+    --accent: #cc0000;
+    --font: "Alte Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --hero-margin: 3.333vw; /* 48/1440 */
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--accent);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .test-banner {
+    background: #111;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0.6rem;
+  }
+
+  /* ---- griglia di debug: stessa di preview-works-test.html, sempre attiva ---- */
+  .debug-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.3;
+    background-image:
+      repeating-linear-gradient(to right, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px),
+      repeating-linear-gradient(to bottom, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px);
+  }
+
+  /* ---- nav: identica a Works (stessi margini, stessa logica) ---- */
+  .site-nav {
+    position: relative;
+    min-height: 5rem;
+  }
+
+  .brand-mark {
+    position: absolute;
+    left: var(--hero-margin);
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .nav-clock {
+    position: absolute;
+    right: var(--hero-margin);
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font);
+    font-size: 1rem;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nav-pills {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .nav-pill {
+    display: inline-flex;
+    align-items: center;
+    height: 1.5rem;
+    padding: 0 1rem;
+    background: var(--paper);
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    font-weight: 400;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .nav-pill.is-current {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* ---- hero: stessa griglia a righe di Works (passo 144px = -1.71vw tra
+     righe), qui senza frecce, con due righe testo+immagine e una riga
+     doppio-testo. ---- */
+  .hero {
+    position: relative;
+  }
+
+  .hero-rows {
+    margin-top: 35.069vw; /* 505/1440, identico a Works prima degli spostamenti manuali — margin, non position:relative+top, così riserva davvero lo spazio nel flusso invece di lasciare il footer sovrapposto */
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 8vw;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 var(--hero-margin);
+    gap: 1.667vw;
+  }
+
+  .hero-row + .hero-row {
+    margin-top: -1.71vw;
+  }
+
+  .hero-row--overlay {
+    position: relative;
+  }
+
+  .hero__title {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    font-size: 11.745vw; /* 169.13/1440 */
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--accent);
+  }
+
+  /* ---- rettangoli-slideshow: stesso effetto e stesse foto di Works —
+     scorrimento automatico tra le 8 foto, velo rosso a riposo, colori
+     reali al passaggio del mouse/tocco. ---- */
+  .hero-thumb {
+    position: relative;
+    flex: none;
+    overflow: hidden;
+    border-radius: 0.417vw; /* 6px */
+  }
+
+  .hero-thumb--junior {
+    width: 25vw;   /* 360/1440 */
+    height: 8.333vw; /* 120/1440 */
+  }
+
+  .hero-thumb--architect {
+    width: 15vw;   /* 216/1440 */
+    height: 8.333vw;
+  }
+
+  .hero-thumb__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .hero-thumb__img.is-active {
+    opacity: 1;
+  }
+
+  .hero-thumb__tint {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    opacity: 0.45;
+    mix-blend-mode: multiply;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .hero-thumb:hover .hero-thumb__tint,
+  .hero-thumb.is-touched .hero-thumb__tint {
+    opacity: 0;
+  }
+
+  .hero__chip {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.667vw; /* 24/1440 */
+    padding: 0 1vw;
+    background: var(--paper);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-family: var(--font);
+    font-size: 0.9vw;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .hero__chip--everyone {
+    left: 13.333vw; /* 192/1440 */
+  }
+
+  .hero__chip--wannabe {
+    left: 25.625vw; /* 345/1440 + 24px (1.667vw) — corregge il -12px di prima */
+  }
+
+  /* ---- footer: identico a Works ---- */
+  .site-footer {
+    margin-top: 4.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .site-footer__inner {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding-left: var(--hero-margin);
+    padding-right: var(--hero-margin);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .site-footer__brand {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .site-footer__meta {
+    font-size: 0.72rem;
+    color: var(--accent);
+    margin-top: 0.5rem;
+  }
+
+  .site-footer__meta a {
+    text-decoration: underline;
+  }
+
+  .colophon {
+    text-align: center;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    opacity: 0.7;
+    padding: 1.5rem 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="test-banner">PAGINA DI PROVA — Home, da export Figma reale. Non è il sito reale.</div>
+
+<div class="debug-grid"></div>
+
+<nav class="site-nav" aria-label="Navigazione principale">
+  <a href="#" class="brand-mark">AM</a>
+  <span class="nav-clock"></span>
+  <div class="nav-pills">
+    <a href="#" class="nav-pill">Work</a>
+    <a href="#" class="nav-pill">About</a>
+    <a href="#" class="nav-pill">Journal</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-rows">
+    <div class="hero-row hero-row--overlay">
+      <span class="hero__title">Hi</span>
+      <span class="hero__title">I'm Aldo</span>
+      <span class="hero__chip hero__chip--everyone">Everyone</span>
+    </div>
+    <div class="hero-row">
+      <span class="hero__title">Junior</span>
+      <div class="hero-thumb hero-thumb--junior" data-slideshow>
+        <img class="hero-thumb__img is-active" src="figma-assets/rect-01/01.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/02.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/03.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/04.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/05.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/06.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/07.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-01/08.jpg" alt="">
+        <div class="hero-thumb__tint"></div>
+      </div>
+    </div>
+    <div class="hero-row hero-row--overlay">
+      <div class="hero-thumb hero-thumb--architect" data-slideshow>
+        <img class="hero-thumb__img is-active" src="figma-assets/rect-02/01.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/02.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/03.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/04.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/05.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/06.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/07.jpg" alt="">
+        <img class="hero-thumb__img" src="figma-assets/rect-02/08.jpg" alt="">
+        <div class="hero-thumb__tint"></div>
+      </div>
+      <span class="hero__title">Architect</span>
+      <span class="hero__chip hero__chip--wannabe">Wanna be</span>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div>
+      <a href="#" class="site-footer__brand">Aldo Marsiglia</a>
+      <div class="site-footer__meta">Portfolio / Archivio</div>
+    </div>
+    <div class="site-footer__meta">© 2026 — <a href="#">Contacts</a></div>
+  </div>
+</footer>
+
+<p class="colophon">Aggiornato — 08.09.2026</p>
+
+<script>
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var now = new Date();
+    document.querySelector('.nav-clock').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // rettangoli-slideshow: stesso meccanismo di Works.
+  document.querySelectorAll('[data-slideshow]').forEach(function (box) {
+    var imgs = box.querySelectorAll('.hero-thumb__img');
+    var i = 0;
+    setInterval(function () {
+      imgs[i].classList.remove('is-active');
+      i = (i + 1) % imgs.length;
+      imgs[i].classList.add('is-active');
+    }, 1200);
+
+    box.addEventListener('touchstart', function () { box.classList.add('is-touched'); }, { passive: true });
+    box.addEventListener('touchend', function () { box.classList.remove('is-touched'); });
+  });
+</script>
+
+</body>
+</html>

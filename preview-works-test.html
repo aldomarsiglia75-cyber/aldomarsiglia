@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROVA — Works (da export Figma)</title>
+<style>
+  @font-face {
+    font-family: "Alte Haas Grotesk";
+    src: url("fonts/AlteHaasGroteskRegular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Alte Haas Grotesk";
+    src: url("fonts/AlteHaasGroteskBold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  /* Tutte le posizioni/dimensioni qui sotto sono i valori in px del tuo
+     export Figma (canvas 1440px) convertiti in vw = px/1440*100 — così la
+     pagina resta in scala esatta con l'originale a qualunque larghezza,
+     invece di usare misure "a occhio". */
+
+  :root {
+    --paper: #f8f8f8;
+    --ink: #2f2f2f;
+    --accent: #cc0000;
+    --font: "Alte Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    /* griglia 12 colonne su cui è costruito il layout in Figma: margine
+       48px, gutter 24px, 12 colonne da 90px su un canvas di 1440 —
+       48*2 + 12*90 + 11*24 = 1440. Gli elementi ancorati al bordo destro
+       (OF, frecce) usano "right: var(--margin)" invece di un left fisso,
+       così restano davvero agganciati al margine a qualunque larghezza,
+       non a una coordinata copiata dall'export. */
+    --margin: 3.333vw;  /* 48/1440 */
+    --gutter: 1.667vw;  /* 24/1440 */
+    --col: 6.25vw;       /* 90/1440 */
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--accent);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .test-banner {
+    background: #111;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0.6rem;
+  }
+
+  .test-banner button {
+    margin-left: 1rem;
+    font-family: inherit;
+    font-size: inherit;
+    background: #cc0000;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 0.2rem 0.7rem;
+    cursor: pointer;
+  }
+
+  /* ---- overlay di debug: griglia di righe rosse ogni 12px, in modulo
+     fisso (non in vw) — per verificare a occhio se gli elementi sono
+     agganciati al modulo 12x12 usato in Figma. Si spegne col bottone.
+     REGOLA: la griglia sta sempre sotto a tutto il resto (z-index
+     negativo) — nessun elemento di contenuto deve avere bisogno di un
+     proprio z-index solo per "vincere" contro la griglia. ---- */
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.3;
+    background-image:
+      repeating-linear-gradient(to right, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px),
+      repeating-linear-gradient(to bottom, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px);
+  }
+
+  .grid-overlay.is-off { display: none; }
+
+  /* ---- blocco hero (nav + titolo + immagini + frecce): posizionamento
+     assoluto a scala vw, 1:1 con l'export — niente flexbox qui, sono
+     coordinate reali. Altezza 71.111vw = 1024/1440, dove nell'export
+     c'è la linea rossa che separa hero e lista. ---- */
+
+  .figma-hero {
+    position: relative;
+    width: 100%;
+    height: 71.111vw;
+    border-bottom: 1px solid var(--accent);
+    overflow: hidden;
+  }
+
+  .figma-hero > * {
+    position: absolute;
+  }
+
+  /* logo e pillole hanno metriche diverse (font-size, padding), quindi
+     allinearli con due "top" copiati a mano non li fa combaciare
+     davvero — qui invece condividono lo stesso centro verticale del
+     .nav-bar (top:50%/translateY(-50%) su entrambi), che è l'unico modo
+     robusto di dire "stessa riga" indipendentemente dalla loro altezza. */
+  .nav-bar {
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 3.75vw;
+    height: 3.056vw;
+  }
+
+  .brand {
+    position: absolute;
+    left: var(--margin);
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    font-size: 2.361vw;
+    line-height: 1;
+  }
+
+  /* pillole nav: centrate sulla larghezza della pagina (non spinte a
+     destra) — nell'export vanno da x578 a x855 su un canvas di 1440,
+     cioè centrate quasi esattamente sul mezzo (720). */
+  .pills {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 1.389vw;
+  }
+
+  .pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 1.667vw;
+    padding: 0 1.2vw;
+    background: var(--paper);
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    font-weight: 400;
+    font-size: 0.9vw;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .pill:hover { background: var(--accent); color: #fff; }
+
+  .pill.is-current {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .headline {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    font-size: 11.745vw;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* ---- righe hero: l'immagine si allinea alla VERA baseline del testo
+     (non al bordo del box CSS, che include lo spazio extra sopra/sotto
+     dei metrici del font) — uso align-items:baseline, nativo del
+     browser: per un elemento di testo la baseline è quella reale delle
+     lettere, per un'immagine (elemento replaced) è il suo bordo
+     inferiore. Così il fondo dell'immagine cade esattamente sulla base
+     delle lettere maiuscole, e siccome l'altezza dell'immagine (120px
+     nell'export) coincide con il cap-height del font, anche il bordo
+     superiore torna allineato alla testa delle maiuscole — niente
+     margini calcolati a mano. */
+  .hero-rows {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 35.069vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 var(--margin);
+    gap: 1.667vw;
+  }
+
+  .hero-row + .hero-row {
+    margin-top: -1.71vw; /* passo reale tra le righe (~144px), più stretto dell'altezza del box di testo (169px) */
+  }
+
+  /* ---- rettangoli-slideshow: scorrimento automatico tra le 8 foto
+     progetto (ordine dal numero nel nome file), velo rosso CC0000 a
+     riposo per uniformarle, colori reali al tocco/hover. ---- */
+  .figma-thumb {
+    position: relative;
+    width: 37.639vw;
+    height: 8.333vw;
+    flex: none;
+    overflow: hidden;
+    border-radius: 0.417vw; /* 6px */
+  }
+
+  .figma-thumb--small {
+    width: 26.667vw;
+  }
+
+  .figma-thumb__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .figma-thumb__img.is-active {
+    opacity: 1;
+  }
+
+  .figma-thumb__tint {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    opacity: 0.45;
+    mix-blend-mode: multiply;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .figma-thumb:hover .figma-thumb__tint,
+  .figma-thumb.is-touched .figma-thumb__tint {
+    opacity: 0;
+  }
+
+  /* le 3 frecce sono nella riga di "My Works" (misurato a mano sullo
+     screenshot di riferimento: le frecce cadono dentro l'estensione
+     verticale di "MY WORKS", non di "OF") — stessa logica delle
+     immagini, align-items:baseline della riga le appoggia alla vera
+     baseline del testo. Disegnate come linea + freccia aperta (non
+     triangolo pieno). */
+  /* centrate sull'altezza della riga (il testo "My Works") invece che
+     appoggiate alla baseline — la riga usa align-items:baseline di
+     default, qui lo si sovrascrive solo per le frecce con align-self,
+     la posizione orizzontale (destra, via justify-content della riga)
+     resta invariata. */
+  .arrows {
+    align-self: center;
+    margin-top: 1.667vw; /* altri 12px in giù (totale 24px dal centro) */
+    display: flex;
+    gap: 1.4vw;
+    color: var(--accent);
+  }
+
+  /* le frecce arrivano in altezza fino alla riga di allineamento di "MY
+     WORKS" (stessa altezza del cap-height del testo, come le foto sopra
+     — 120/1440 = 8.333vw), non più una taglia decorativa piccola. */
+  .arrow {
+    width: 5.88vw;
+    height: 8.333vw;
+    flex: none;
+  }
+
+  /* "My Works" resta un unico testo continuo (non spezzato in due), e
+     "SELECTED" ci sta sopra come un adesivo: elemento a parte,
+     posizionato assoluto, con sfondo bianco pieno che copre le lettere
+     rosse sottostanti — non è inline nel flusso del testo. La riga
+     diventa position:relative per farle da riferimento. */
+  .hero-row--mywork {
+    position: relative;
+  }
+
+  /* etichetta "SELECTED": misure esatte lette dall'ispettore Figma,
+     106 × 24px (Hug) sul canvas 1440 → 7.361vw × 1.667vw. */
+  .chip-selected {
+    position: absolute;
+    left: 18.917vw; /* altri 6px a sinistra (0.417vw) */
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 7.361vw;
+    height: 1.667vw;
+    background: var(--paper);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-size: 0.9vw;
+    font-weight: 400;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ---- lista progetti ---- */
+  .works-list {
+    padding-top: 12.361vw; /* stesso vuoto che nell'export separa la linea dalla prima riga */
+  }
+
+  /* stesso meccanismo del sito attuale: al passaggio/tocco la riga si
+     espande e rivela la foto del progetto in bianco e nero dietro al
+     titolo; al click un velo rosso lampeggia sopra prima di seguire il
+     link (gestito in JS, .is-active). */
+  .works-list__row {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    min-height: 12.361vw; /* 178/1440 */
+    border-bottom: 1px solid var(--accent);
+    transition: min-height 0.4s ease;
+  }
+
+  .works-list__row:hover,
+  .works-list__row.is-active {
+    min-height: 30vw;
+  }
+
+  .works-list__row:first-child {
+    border-top: 1px solid var(--accent);
+  }
+
+  .works-list__bg {
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg);
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(1) contrast(1.05);
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 0.28s ease, transform 0.5s ease;
+  }
+
+  .works-list__row:hover .works-list__bg,
+  .works-list__row:focus-visible .works-list__bg,
+  .works-list__row.is-active .works-list__bg {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .works-list__flash {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .works-list__row.is-active .works-list__flash {
+    opacity: 0.7;
+  }
+
+  .works-list__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2vw;
+    height: 12.361vw;
+    padding: 0 3.333vw;
+    transition: color 0.2s ease;
+  }
+
+  .works-list__row:hover .works-list__inner,
+  .works-list__row.is-active .works-list__inner {
+    color: #fff;
+  }
+
+  .works-list__title {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 8.889vw; /* 128/1440 */
+    line-height: 1;
+    letter-spacing: -0.005em;
+  }
+
+  .works-list__row:hover .works-list__pill,
+  .works-list__row.is-active .works-list__pill {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff;
+  }
+
+  .works-list__pill {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    height: 1.667vw;
+    padding: 0 1.2vw;
+    background: var(--paper);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-size: 0.9vw;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex: none;
+  }
+
+  @media (max-width: 700px) {
+    /* sotto una certa larghezza lo scaling puramente vw rende tutto
+       troppo piccolo/schiacciato — qui serve un adattamento a parte,
+       non ancora fatto in questa prova: per ora resta la stessa scala. */
+    .works-list__row { flex-wrap: wrap; height: auto; padding: 3vw; gap: 1vw; }
+  }
+</style>
+</head>
+<body>
+
+<div class="test-banner">PAGINA DI PROVA — proporzioni a scala 1:1 con l'export Figma (base 1440px). Non è il sito reale.
+  <button type="button" onclick="document.querySelector('.grid-overlay').classList.toggle('is-off')">Mostra/nascondi griglia 12px</button>
+</div>
+
+<div class="grid-overlay"></div>
+
+<div class="figma-hero">
+  <div class="nav-bar">
+    <a class="brand" href="#">AM</a>
+    <div class="pills">
+      <a class="pill is-current" href="#">Work</a>
+      <a class="pill" href="#">About</a>
+      <a class="pill" href="#">Journal</a>
+    </div>
+  </div>
+
+  <div class="hero-rows">
+    <div class="hero-row">
+      <span class="headline">A Few</span>
+      <div class="figma-thumb" data-slideshow>
+        <img class="figma-thumb__img is-active" src="figma-assets/rect-01/01.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/02.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/03.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/04.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/05.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/06.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/07.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-01/08.jpg" alt="">
+        <div class="figma-thumb__tint"></div>
+      </div>
+    </div>
+    <div class="hero-row">
+      <div class="figma-thumb figma-thumb--small" data-slideshow>
+        <img class="figma-thumb__img is-active" src="figma-assets/rect-02/01.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/02.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/03.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/04.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/05.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/06.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/07.jpg" alt="">
+        <img class="figma-thumb__img" src="figma-assets/rect-02/08.jpg" alt="">
+        <div class="figma-thumb__tint"></div>
+      </div>
+      <span class="headline">Of</span>
+    </div>
+    <div class="hero-row hero-row--mywork">
+      <span class="headline">My Works</span>
+      <span class="chip-selected">Selected</span>
+      <div class="arrows">
+        <svg class="arrow" viewBox="0 0 24 34"><line x1="12" y1="0" x2="12" y2="24" stroke="currentColor" stroke-width="3"/><polyline points="4,17 12,26 20,17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="arrow" viewBox="0 0 24 34"><line x1="12" y1="0" x2="12" y2="24" stroke="currentColor" stroke-width="3"/><polyline points="4,17 12,26 20,17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="arrow" viewBox="0 0 24 34"><line x1="12" y1="0" x2="12" y2="24" stroke="currentColor" stroke-width="3"/><polyline points="4,17 12,26 20,17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="works-list">
+  <a class="works-list__row" href="progetto-intreccio.html" style="--bg:url('covers/01-intreccio.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">Intreccio</span>
+      <span class="works-list__pill">I Triennale</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-koine.html" style="--bg:url('covers/02-koine.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">Koinè</span>
+      <span class="works-list__pill">III Triennale</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-spina-abitata.html" style="--bg:url('covers/03-spina-abitata.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">Spina Abitata</span>
+      <span class="works-list__pill">I Magistrale</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-space.html" style="--bg:url('covers/04-space.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">S.P.A.C.E.</span>
+      <span class="works-list__pill">I Magistrale</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-padiglione.html" style="--bg:url('covers/05-padiglione.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">Padiglione</span>
+      <span class="works-list__pill">Fuorisalone 2026</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-ie-series.html" style="--bg:url('covers/06-the-ie-series.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">The IE Series</span>
+      <span class="works-list__pill">I Magistrale</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-promenade.html" style="--bg:url('covers/07-promenade.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">Promenade</span>
+      <span class="works-list__pill">II Triennale</span>
+    </span>
+  </a>
+  <a class="works-list__row" href="progetto-onoff-line.html" style="--bg:url('covers/08-onoffline.jpg')">
+    <span class="works-list__bg" aria-hidden="true"></span>
+    <span class="works-list__flash" aria-hidden="true"></span>
+    <span class="works-list__inner">
+      <span class="works-list__title">On/Off-Line</span>
+      <span class="works-list__pill">Magistrale</span>
+    </span>
+  </a>
+</div>
+
+<script>
+  // rettangoli-slideshow: ciclo automatico tra le foto, in dissolvenza.
+  document.querySelectorAll('[data-slideshow]').forEach(function (box) {
+    var imgs = box.querySelectorAll('.figma-thumb__img');
+    var i = 0;
+    setInterval(function () {
+      imgs[i].classList.remove('is-active');
+      i = (i + 1) % imgs.length;
+      imgs[i].classList.add('is-active');
+    }, 1200);
+
+    // touch: mostra i colori reali finché il dito resta sul rettangolo.
+    box.addEventListener('touchstart', function () { box.classList.add('is-touched'); }, { passive: true });
+    box.addEventListener('touchend', function () { box.classList.remove('is-touched'); });
+  });
+
+  // lista progetti: al click, prima il lampeggio rosso poi si segue il link
+  // (stesso procedimento del sito attuale).
+  document.querySelectorAll('.works-list__row').forEach(function (row) {
+    row.addEventListener('click', function (e) {
+      if (row.classList.contains('is-active')) return;
+      e.preventDefault();
+      var href = row.getAttribute('href');
+      row.classList.add('is-active');
+      setTimeout(function () {
+        window.location.href = href;
+      }, 420);
+    });
+  });
+</script>
+
+</body>
+</html>

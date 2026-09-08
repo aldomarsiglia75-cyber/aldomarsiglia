@@ -1,15 +1,33 @@
 /* ==========================================================================
    Aldo Marsiglia — Architettura & Interior Design
-   Sistema visivo: carta neutra (#F8F8F8) e inchiostro grafite (#2F2F2F),
-   con il rosso (#CC0000) riservato agli stati interattivi — hover, focus,
-   selezione del testo, cursore custom — mai come colore statico di testo
-   o decorazione a riposo. Font: Helvetica (di sistema).
+   Sistema visivo — RISCRITTO 2026-09-08 sulla base dell'export HTML reale
+   da Figma della pagina Works (vedi [[project_sito_rebuild]]): carta bianca
+   (#F8F8F8), il rosso (#CC0000) è l'inchiostro principale del testo su
+   Works (titoli, nav, nomi progetto), il grafite (#2F2F2F) resta per le
+   pagine non ancora riprese da Figma (Home/About/Journal). Font: Alte Haas
+   Grotesk (bold per i titoli enormi, regular per i nomi lista).
    ========================================================================== */
 
 @font-face {
   font-family: "A Matter";
   src: url("fonts/A_MATTER_.otf") format("opentype");
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("fonts/AlteHaasGroteskRegular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alte Haas Grotesk";
+  src: url("fonts/AlteHaasGroteskBold.ttf") format("truetype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -23,9 +41,9 @@
   --line-strong: rgba(47, 47, 47, 0.3);
   --accent: #cc0000;
 
-  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Alte Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Alte Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Alte Haas Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --track-tight: -0.02em;
 
   --edge: 6rem;
@@ -33,6 +51,25 @@
   --gap-lg: 4.5rem;
   --max: 76rem;
   --card-w: 18rem;
+
+  /* griglia 12 colonne su cui è costruito l'hero di Works in Figma: margine
+     48px, gutter 24px, colonne 90px su un canvas di riferimento di 1440px
+     — usata in vw così l'hero resta in scala esatta con l'originale a
+     qualunque larghezza (vedi .hero* più sotto). */
+  --hero-margin: 3.333vw;
+  --hero-gutter: 1.667vw;
+  --hero-col: 6.25vw;
+
+  /* altezza approssimativa della nav — la nav NON è sticky (scompare
+     scorrendo), ma occupa spazio reale in flusso normale mentre il
+     pannello delle pagine progetto è fixed: senza questo offset iniziale
+     il pannello (fixed, ignora il flusso) partirebbe da y:0 e finirebbe
+     sotto/sovrapposto alla nav. Una volta che la nav scompare scorrendo,
+     lo spazio lasciato libero in alto è dello stesso colore (--paper) del
+     pannello: nessuna cucitura visibile. project-detail.js misura
+     l'altezza reale della nav a runtime, questo è solo il valore CSS di
+     partenza prima che il JS giri. */
+  --nav-h: 5.5rem;
 }
 
 /* ---- journal: pagina rossa, unica eccezione alla palette neutra del sito ------
@@ -47,7 +84,6 @@ body.journal {
 
 body.journal .site-nav {
   background: var(--accent);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 body.journal .site-nav a {
@@ -72,10 +108,6 @@ body.journal .scale-rule {
 
 body.journal .ig-grid__item {
   background: rgba(255, 255, 255, 0.1);
-}
-
-body.journal .site-footer {
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 body.journal .site-footer__meta {
@@ -184,15 +216,20 @@ h1, h2, h3, p, figure, blockquote {
    prima cosa in pagina, quindi è già fissa dal primo istante. Nessun
    toggle per mobile: con solo cinque link, va semplicemente a capo. */
 
+/* non è sticky: scompare scorrendo, come nella pagina di prova validata
+   (preview-works-test.html) — non resta agganciata in cima allo schermo. */
+/* sfondo trasparente apposta: sulle pagine con la griglia di debug (vedi
+   .debug-grid sopra) deve continuare a vedersi anche dentro la nav, non
+   solo sotto — uno sfondo opaco qui la coprirebbe. Journal la reimposta
+   comunque a rosso pieno più sotto. */
 .site-nav {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 50;
-  background-color: var(--paper);
-  border-bottom: 1px solid var(--line);
+  min-height: 5rem;
 }
 
 .site-nav__inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -203,7 +240,7 @@ h1, h2, h3, p, figure, blockquote {
 
 .site-nav a {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: clamp(1.15rem, 2.6vw, 1.9rem);
   letter-spacing: var(--track-tight);
@@ -218,32 +255,390 @@ h1, h2, h3, p, figure, blockquote {
   outline: none;
 }
 
-/* ---- intro: schermata d'apertura, solo Home ---------------------------------- */
+/* ---- brand-mark + nav-pills: nav presa 1:1 dall'export Figma reale della
+   pagina Works (8/9/2026, vedi [[project_sito_rebuild]]) — logo "AM" e
+   pillole rosse su bianco, centrate sulla larghezza della pagina. Quella
+   della pagina corrente si riempie di rosso in modo permanente: eccezione
+   dichiarata a [[feedback_blue_as_selection_state]] (qui il pieno indica
+   "dove sei", non è decorazione a riposo). ---- */
 
-.intro {
-  min-height: 100vh;
+/* selettori "a.brand-mark"/"a.nav-pill" invece di ".brand-mark" da soli:
+   ".site-nav a" (classe+elemento) ha più specificità di una singola
+   classe e altrimenti vincerebbe lui, lasciando questi link grafite
+   invece che rossi. */
+/* fuori da .wrap apposta: deve allinearsi al margine dell'hero
+   (var(--hero-margin), misurato dal vero bordo del viewport), non al
+   margine della nav (var(--edge), diverso) — per questo è figlio diretto
+   di .site-nav e non di .wrap.site-nav__inner. Resta alla stessa altezza
+   di sempre (centrata in .site-nav via top:50%), solo l'allineamento
+   orizzontale cambia. */
+.site-nav a.brand-mark {
+  position: absolute;
+  left: var(--hero-margin);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  color: var(--accent);
+  line-height: 1;
+  transition: opacity 0.15s ease;
+}
+
+.site-nav a.brand-mark:hover,
+.site-nav a.brand-mark:focus-visible {
+  opacity: 0.7;
+  outline: none;
+}
+
+/* orologio digitale, speculare al logo — stesso margine (destro invece
+   che sinistro), stessa altezza. Aggiornato via nav-clock.js. */
+.nav-clock {
+  position: absolute;
+  right: var(--hero-margin);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+body.journal .nav-clock {
+  color: #fff;
+}
+
+.nav-pills {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.site-nav a.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem; /* 24px */
+  padding: 0 1rem;
+  background: var(--paper);
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.site-nav a.nav-pill:hover,
+.site-nav a.nav-pill:focus-visible {
+  background: var(--accent);
+  color: #fff;
+  outline: none;
+}
+
+.site-nav a.nav-pill[aria-current="page"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+body.journal .site-nav a.brand-mark {
+  color: #fff;
+}
+
+body.journal .site-nav a.brand-mark:hover,
+body.journal .site-nav a.brand-mark:focus-visible {
+  opacity: 1;
+  color: var(--ink);
+}
+
+body.journal .site-nav a.nav-pill {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+body.journal .site-nav a.nav-pill:hover,
+body.journal .site-nav a.nav-pill:focus-visible {
+  background: #fff;
+  color: var(--accent);
+}
+
+body.journal .site-nav a.nav-pill[aria-current="page"] {
+  background: #fff;
+  border-color: #fff;
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .nav-pills {
+    position: static;
+    transform: none;
+    width: 100%;
+    order: 3;
+    justify-content: flex-start;
+  }
+
+  .site-nav__inner {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---- griglia di debug: righe rosse ogni 12px, in modulo fisso (non in
+   vw) — stesso strumento usato in preview-works-test.html per verificare
+   l'allineamento. Sta sempre sotto a tutto (z-index negativo): nessun
+   elemento di contenuto deve avere bisogno di un proprio z-index solo
+   per "vincerla". Sempre attiva, nessun modo per spegnerla — deve
+   restare visibile anche dentro la nav, quindi la nav non ha uno sfondo
+   opaco che la coprirebbe (vedi .site-nav più sotto). ---- */
+.debug-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.3;
+  background-image:
+    repeating-linear-gradient(to right, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(to bottom, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px);
+}
+
+/* ---- hero Works: "A Few Of My Selected Works" — misure in scala esatta
+   (vw) con l'export Figma reale su un canvas di riferimento di 1440px,
+   validate a mano con l'utente elemento per elemento (vedi
+   [[project_sito_rebuild]]). Ogni riga testo+immagine condivide la vera
+   baseline del testo (align-items:baseline nativo del browser, non un
+   calcolo a mano) — l'immagine (o le frecce) si allinea esattamente dalla
+   testa alla base delle lettere maiuscole. ---- */
+
+.hero {
+  position: relative;
+  height: 71.111vw; /* 1024/1440 */
+  border-bottom: 1px solid var(--accent);
+  overflow: hidden;
+}
+
+.hero-rows {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 19.236vw; /* 12px in giù (0.833vw) */
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 var(--hero-margin);
+  gap: 1.667vw;
+}
+
+.hero-row + .hero-row {
+  margin-top: -1.71vw; /* passo reale tra le righe (~144px), più stretto dell'altezza del box di testo (169px) */
+}
+
+.hero-row--overlay {
+  position: relative;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-size: 11.745vw; /* 169.13/1440 */
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+/* rettangoli-slideshow: scorrimento automatico tra le foto progetto
+   (ordine dal numero nel nome file), velo rosso a riposo, colori reali
+   al tocco/hover (vedi hero-slideshow.js). */
+.hero-thumb {
+  position: relative;
+  width: 37.639vw; /* 542/1440 */
+  height: 8.333vw; /* 120/1440 */
+  flex: none;
+  overflow: hidden;
+  border-radius: 0.417vw; /* 6px */
+}
+
+.hero-thumb--small {
+  width: 26.667vw; /* 384/1440 */
+}
+
+.hero-thumb__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hero-thumb__img.is-active {
+  opacity: 1;
+}
+
+.hero-thumb__tint {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.hero-thumb:hover .hero-thumb__tint,
+.hero-thumb.is-touched .hero-thumb__tint {
+  opacity: 0;
+}
+
+/* frecce: centrate sull'altezza della riga "My Works" (non appoggiate
+   alla baseline come testo/immagini) — align-self la sovrascrive solo
+   qui, la posizione orizzontale a destra resta quella della riga. */
+.hero__arrows {
+  align-self: center;
+  margin-top: 1.667vw;
+  display: flex;
+  gap: 1.4vw;
+  color: var(--accent);
+}
+
+.hero__arrow {
+  width: 5.88vw;
+  height: 8.333vw;
+  flex: none;
+}
+
+/* "My Works" resta un unico testo continuo; "Selected" ci sta sopra come
+   un adesivo — elemento a parte, posizionato assoluto, sfondo bianco
+   pieno che copre le lettere sottostanti. */
+.hero__chip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem var(--edge) 3rem;
-  text-align: center;
-}
-
-.intro__name {
-  font-family: var(--font-display);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: var(--track-tight);
-  line-height: 0.9;
-  font-size: clamp(3.2rem, 12vw, 10.5rem);
-}
-
-.intro__letter {
-  transition: color 0.15s ease;
-}
-
-.intro__letter:hover {
+  height: 1.667vw; /* 24/1440 */
+  padding: 0 1vw;
+  background: var(--paper);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.9vw;
+  font-weight: 400;
   color: var(--accent);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Works: "Selected" — larghezza fissa (106px), niente padding, come da
+   export Figma originale. Home: "Everyone"/"Wanna be" usano il padding
+   di base perché il testo non è a larghezza fissa nell'export. */
+.hero__chip--selected {
+  left: 18.917vw;
+  width: 7.361vw; /* 106/1440 */
+  padding: 0;
+}
+
+.hero__chip--everyone {
+  left: 13.333vw; /* 192/1440 */
+}
+
+.hero__chip--wannabe {
+  left: 25.625vw; /* 345/1440 + 24px */
+}
+
+/* ---- hero Home: "Hi I'm Aldo — Junior Architect" — stesso passo di riga
+   (-1.71vw) e stesso font di Works, ma il contenitore riserva davvero
+   spazio nel flusso (niente absolute/fixed-height/border come Works),
+   vedi [[project_sito_rebuild]]. ---- */
+.hero--home {
+  height: auto;
+  border-bottom: none;
+  overflow: visible;
+}
+
+.hero--home .hero-rows {
+  position: static;
+  margin-top: 35.069vw; /* 505/1440 */
+  padding-bottom: 8vw;
+}
+
+.hero-thumb--junior {
+  width: 25vw; /* 360/1440 */
+}
+
+.hero-thumb--architect {
+  width: 15vw; /* 216/1440 */
+}
+
+@media (max-width: 640px) {
+  /* la pura scala vw diventa illeggibile sotto una certa larghezza: qui
+     l'hero passa a un impilamento verticale semplice invece di provare a
+     mantenere le stesse proporzioni del canvas 1440. */
+  .hero {
+    height: auto;
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  .hero-rows {
+    position: static;
+    padding: 0;
+  }
+
+  .hero-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    gap: 0.75rem;
+  }
+
+  .hero-row + .hero-row {
+    margin-top: 0;
+  }
+
+  .hero__title {
+    font-size: 14vw;
+    white-space: normal;
+  }
+
+  .hero-thumb,
+  .hero-thumb--small,
+  .hero-thumb--junior,
+  .hero-thumb--architect {
+    width: 100%;
+    height: 40vw;
+  }
+
+  .hero__chip {
+    position: static;
+    transform: none;
+    width: auto;
+    padding: 0 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .hero__arrows {
+    margin-top: 0;
+  }
 }
 
 /* ---- about: dossier a tre colonne, direttamente in Home ---------------------- */
@@ -412,7 +807,7 @@ h1, h2, h3, p, figure, blockquote {
 
 .h-gallery__info-title {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--track-tight);
   font-size: clamp(2rem, 6vw, 4.25rem);
@@ -463,22 +858,21 @@ h1, h2, h3, p, figure, blockquote {
   background: var(--accent);
 }
 
-/* ---- works-list: vista alternativa "Lista" della pagina Works — il nome del
-   progetto è l'elemento grafico principale, l'immagine appare (bianco/nero)
-   dietro il testo al passaggio del mouse; la riga si allarga in altezza per
-   mostrarla meglio, il clic la tinge di rosso prima di seguire il link
-   (stessa meccanica di .h-gallery, adattata a un elenco verticale). Righe a
-   tutta larghezza (edge-to-edge), come la gallery Scroll sopra di essa —
-   non è dentro un .wrap, il rientro dal bordo è solo sul testo interno. ---- */
+/* ---- works-list: lista progetti sotto l'hero — il nome del progetto è
+   l'elemento grafico principale (rosso, regular, scala Figma 128/1440),
+   l'immagine appare in bianco/nero dietro al testo al passaggio del
+   mouse/tocco, la riga si allarga in altezza per mostrarla meglio, il
+   clic la tinge di rosso prima di seguire il link — stesso procedimento
+   già in uso nel sito. Righe a tutta larghezza (edge-to-edge). ---- */
 
 .works-list {
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid var(--accent);
 }
 
 .works-list__row {
   position: relative;
   display: block;
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid var(--accent);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -487,7 +881,7 @@ h1, h2, h3, p, figure, blockquote {
 
 .works-list__row:hover,
 .works-list__row.is-active {
-  min-height: 42vh;
+  min-height: 30vw;
 }
 
 .works-list__bg {
@@ -526,10 +920,11 @@ h1, h2, h3, p, figure, blockquote {
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: 2rem;
-  padding: 1rem var(--edge);
+  gap: 2vw;
+  height: 12.361vw; /* 178/1440 */
+  padding: 0 var(--hero-margin);
   transition: color 0.2s ease;
 }
 
@@ -540,41 +935,61 @@ h1, h2, h3, p, figure, blockquote {
 
 .works-list__title {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 400;
   text-transform: uppercase;
-  font-size: clamp(2rem, 6vw, 4.25rem);
-  line-height: 1.02;
-  letter-spacing: var(--track-tight);
-  white-space: nowrap;
-}
-
-.works-list__meta {
-  font-size: 0.85rem;
-  text-align: right;
-  color: var(--stone);
-  white-space: nowrap;
+  font-size: 8.889vw; /* 128/1440 */
+  line-height: 1;
+  letter-spacing: -0.005em;
+  color: var(--accent);
   transition: color 0.2s ease;
 }
 
-.works-list__meta span {
-  display: block;
+.works-list__row:hover .works-list__title,
+.works-list__row.is-active .works-list__title {
+  color: #fff;
 }
 
-.works-list__row:hover .works-list__meta,
-.works-list__row.is-active .works-list__meta {
-  color: rgba(255, 255, 255, 0.85);
+.works-list__meta {
+  display: flex;
+  gap: 0.6vw;
+  flex: none;
+}
+
+.works-list__meta span {
+  display: inline-flex;
+  align-items: center;
+  height: 1.667vw; /* 24px */
+  padding: 0 1vw;
+  background: var(--paper);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.85vw;
+  color: var(--accent);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.works-list__row:hover .works-list__meta span,
+.works-list__row.is-active .works-list__meta span {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
 }
 
 @media (max-width: 760px) {
   .works-list__inner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.15rem;
-    padding: 0.9rem var(--edge);
+    height: auto;
+    gap: 0.5rem;
+    padding: 1.25rem var(--edge);
   }
 
-  .works-list__meta {
-    text-align: left;
+  .works-list__title {
+    font-size: 12vw;
+    white-space: normal;
   }
 }
 
@@ -587,7 +1002,7 @@ h1, h2, h3, p, figure, blockquote {
 
 .page-header h1 {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--track-tight);
   font-size: clamp(2.25rem, 5vw, 3.25rem);
@@ -983,7 +1398,6 @@ h1, h2, h3, p, figure, blockquote {
 /* ---- footer ------------------------------------------------------------------ */
 
 .site-footer {
-  border-top: 1px solid var(--line);
   margin-top: 4.5rem;
   padding-top: 1.5rem;
   padding-bottom: 3rem;
@@ -998,20 +1412,30 @@ h1, h2, h3, p, figure, blockquote {
 }
 
 .site-footer__brand {
+  display: inline-block;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.2rem;
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.site-footer__brand:hover,
+.site-footer__brand:focus-visible {
+  opacity: 0.7;
+  outline: none;
 }
 
 .site-footer__meta {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--stone);
+  color: var(--accent);
   margin-top: 0.5rem;
 }
 
 .site-footer a:hover {
-  color: var(--accent);
+  opacity: 0.6;
 }
 
 .colophon {
@@ -1019,7 +1443,7 @@ h1, h2, h3, p, figure, blockquote {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.04em;
-  color: var(--stone);
+  color: var(--accent);
   opacity: 0.7;
   padding: 1.5rem 0;
 }
@@ -1175,7 +1599,7 @@ h1, h2, h3, p, figure, blockquote {
 
 .project-detail__panel {
   position: fixed;
-  top: 0;
+  top: var(--nav-h);
   left: 0;
   bottom: 0;
   width: min(34vw, 30rem);
@@ -1363,8 +1787,8 @@ h1, h2, h3, p, figure, blockquote {
 
 .project-detail__pin {
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
   display: flex;
 }
 

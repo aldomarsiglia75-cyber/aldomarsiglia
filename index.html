@@ -11,21 +11,56 @@
 
 <main>
 
-  <section class="intro">
-    <h1 class="intro__name">
-      <span class="intro__letter">A</span><span class="intro__letter">l</span><span class="intro__letter">d</span><span class="intro__letter">o</span><br>
-      <span class="intro__letter">M</span><span class="intro__letter">a</span><span class="intro__letter">r</span><span class="intro__letter">s</span><span class="intro__letter">i</span><span class="intro__letter">g</span><span class="intro__letter">l</span><span class="intro__letter">i</span><span class="intro__letter">a</span>
-    </h1>
-  </section>
+  <div class="debug-grid"></div>
 
   <nav class="site-nav" aria-label="Navigazione principale">
-    <div class="wrap site-nav__inner">
-      <a href="index.html" aria-current="page">Home</a>
-      <a href="progetti.html">Works</a>
-      <a href="journal.html">Journal</a>
-      <a href="#contatti">Contacts</a>
+    <a href="index.html" class="brand-mark" aria-label="Aldo Marsiglia — Home">AM</a>
+    <span class="nav-clock" aria-hidden="true"></span>
+    <div class="nav-pills">
+        <a href="progetti.html" class="nav-pill">Work</a>
+        <a href="index.html#about" class="nav-pill">About</a>
+        <a href="journal.html" class="nav-pill">Journal</a>
     </div>
   </nav>
+
+  <section class="hero hero--home">
+    <div class="hero-rows">
+      <div class="hero-row hero-row--overlay">
+        <span class="hero__title">Hi</span>
+        <span class="hero__title">I'm Aldo</span>
+        <span class="hero__chip hero__chip--everyone">Everyone</span>
+      </div>
+      <div class="hero-row">
+        <span class="hero__title">Junior</span>
+        <div class="hero-thumb hero-thumb--junior" data-slideshow>
+          <img class="hero-thumb__img is-active" src="figma-assets/rect-01/01.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/02.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/03.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/04.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/05.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/06.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/07.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-01/08.jpg" alt="">
+          <div class="hero-thumb__tint"></div>
+        </div>
+      </div>
+      <div class="hero-row hero-row--overlay">
+        <div class="hero-thumb hero-thumb--architect" data-slideshow>
+          <img class="hero-thumb__img is-active" src="figma-assets/rect-02/01.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/02.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/03.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/04.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/05.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/06.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/07.jpg" alt="">
+          <img class="hero-thumb__img" src="figma-assets/rect-02/08.jpg" alt="">
+          <div class="hero-thumb__tint"></div>
+        </div>
+        <span class="hero__title">Architect</span>
+        <span class="hero__chip hero__chip--wannabe">Wanna be</span>
+      </div>
+    </div>
+  </section>
 
   <section class="about" id="about">
     <div class="wrap about__grid">
@@ -110,7 +145,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <div class="site-footer__brand">Aldo Marsiglia</div>
+      <a href="index.html" class="site-footer__brand">Aldo Marsiglia</a>
       <div class="site-footer__meta">Portfolio / Archivio</div>
     </div>
     <div class="site-footer__meta">© 2026 — <a href="#contatti">Contacts</a></div>
@@ -120,6 +155,8 @@
 <p class="colophon">Aggiornato — 04.09.2026</p>
 
 <script src="cursor.js"></script>
+<script src="nav-clock.js"></script>
+<script src="hero-slideshow.js"></script>
 
 </body>
 </html>

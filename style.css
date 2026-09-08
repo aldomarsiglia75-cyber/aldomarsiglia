@@ -578,7 +578,7 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
 
 .hero--home .hero-rows {
   position: static;
-  margin-top: 35.069vw; /* 505/1440 */
+  margin-top: 19.236vw; /* stessa posizione dall'alto di .hero-rows in Works, vedi .hero-rows */
   padding-bottom: 8vw;
 }
 
@@ -602,6 +602,10 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   .hero-rows {
     position: static;
     padding: 0;
+  }
+
+  .hero--home .hero-rows {
+    margin-top: 0;
   }
 
   .hero-row {

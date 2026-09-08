@@ -1,2 +1,6 @@
 .DS_Store
 fonts/NeueHaasDisplay*.ttf
+
+# materiali grezzi/personali, non usati dal sito (troppo grandi o non
+# pertinenti: il sito usa solo covers/, elaborati/, figma-assets/, fonts/)
+archive/

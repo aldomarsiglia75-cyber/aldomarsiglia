@@ -366,6 +366,72 @@ h1, h2, h3, p, figure, blockquote {
   outline: none;
 }
 
+/* menu a tendina dal logo "AM": solo mobile (sotto i 640px, vedi JS in
+   nav-menu.js — che intercetta il click solo lì, su desktop il logo
+   resta un link diretto alla home). Stesso pattern di .nav-contacts__panel
+   (rosso pieno, testo bianco) ma appeso a sinistra sotto al logo invece
+   che a destra sotto al pulsante Contacts. Richiesto dall'utente al
+   posto delle pillole impilate, che com'erano create un doppione
+   confuso con la riga del logo su mobile. */
+.nav-menu__panel {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: var(--hero-margin);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 10rem;
+  padding: 1rem 1.2rem;
+  background: var(--accent);
+  border-radius: 0.9rem;
+}
+
+.nav-menu__panel[hidden] {
+  display: none;
+}
+
+.site-nav a.nav-menu__link {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: var(--track-tight);
+  color: #fff;
+  text-decoration: none;
+}
+
+.site-nav a.nav-menu__link:hover,
+.site-nav a.nav-menu__link:focus-visible {
+  color: var(--ink);
+  outline: none;
+}
+
+.site-nav a.nav-menu__link[aria-current="page"] {
+  text-decoration: underline;
+}
+
+/* invertito su Magazine (già rosso pieno), stesso rovesciamento di
+   .nav-contacts__panel: pannello bianco/testo rosso invece di
+   rosso/bianco, altrimenti sparirebbe sullo sfondo. */
+body.magazine .nav-menu__panel {
+  background: #fff;
+  border: 1px solid var(--accent);
+}
+
+body.magazine .site-nav a.nav-menu__link {
+  color: var(--accent);
+}
+
+/* rete di sicurezza: il pannello si apre solo via JS sotto i 640px, ma
+   se la finestra viene ridimensionata da mobile a desktop mentre è
+   aperto resta comunque nascosto qui. */
+@media (min-width: 641px) {
+  .nav-menu__panel {
+    display: none !important;
+  }
+}
+
 body.magazine .nav-contacts__trigger {
   background: transparent;
   color: #fff;
@@ -460,17 +526,13 @@ body.magazine .site-nav a.nav-pill[aria-current="page"] {
   color: var(--accent);
 }
 
+/* sotto i 640px le pillole spariscono: sostituite dal menu a tendina
+   del logo (.nav-menu__panel sopra) — prima finivano impilate su una
+   riga a parte sotto al logo, un doppione confuso, richiesto
+   dall'utente di toglierlo. */
 @media (max-width: 640px) {
   .nav-pills {
-    position: static;
-    transform: none;
-    width: 100%;
-    order: 3;
-    justify-content: flex-start;
-  }
-
-  .site-nav__inner {
-    flex-wrap: wrap;
+    display: none;
   }
 }
 
@@ -1665,9 +1727,11 @@ body.magazine .debug-grid {
 
   /* sotto i 640px niente vincolo di prima-schermata: la foto torna a
      un'altezza fissa e la sezione scorre liberamente come il resto del
-     sito in mobile. */
+     sito in mobile. margin-top invece di 0 (:first-child): il claim va
+     più giù, staccato dalla nav — richiesto dall'utente. */
   .magazine-claim {
     height: auto;
+    margin-top: 3rem;
   }
 
   .magazine-claim__photo {

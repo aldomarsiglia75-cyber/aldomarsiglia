@@ -12,7 +12,13 @@
 <div class="debug-grid"></div>
 
 <nav class="site-nav" aria-label="Navigazione principale">
-  <a href="index.html" class="brand-mark" aria-label="Aldo Marsiglia — Home">AM</a>
+  <a href="index.html" class="brand-mark" aria-label="Aldo Marsiglia — Home" aria-expanded="false" aria-controls="nav-menu-panel">AM</a>
+  <div class="nav-menu__panel" id="nav-menu-panel" hidden>
+      <a class="nav-menu__link" href="index.html">Home</a>
+      <a class="nav-menu__link" href="progetti.html" aria-current="page">Work</a>
+      <a class="nav-menu__link" href="about.html">About</a>
+      <a class="nav-menu__link" href="magazine.html">Magazine</a>
+    </div>
   <div class="nav-contacts">
     <button type="button" class="nav-contacts__trigger" aria-expanded="false" aria-controls="nav-contacts-panel" aria-label="Contacts">
       <svg class="nav-contacts__chevron" viewBox="0 0 10 6" aria-hidden="true"><polyline points="1,1 5,5 9,1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -166,6 +172,7 @@
 
 <script src="cursor.js"></script>
 <script src="nav-contacts.js"></script>
+<script src="nav-menu.js"></script>
 <script src="hero-slideshow.js"></script>
 <script src="works-gallery.js"></script>
 

@@ -171,6 +171,74 @@ Mai `font-weight: 900` (convertito a 700 ovunque). Mai `monospace` per
 etichette/orologio — sempre `var(--font)`/`var(--font-mono)`, che in
 questo sito puntano entrambe ad Alte Haas Grotesk.
 
+## Composizione libera (About, 09/09/2026): canvas per sezione
+
+A differenza di Works/Home (righe flex ripetute), l'export Figma di About
+è una composizione libera — ogni elemento ha solo `left`/`top` assoluti,
+nessuna riga ripetuta. Pattern usato per portarla in codice restando
+fedeli all'export senza un unico blocco assoluto da 2484px:
+
+- La pagina è divisa in sezioni normal-flow che si impilano una sotto
+  l'altra (`.about-hero`, `.about-intro`, `.about-bio`, `.about-cards`),
+  ciascuna `position: relative` e alta quanto il suo contenuto
+  nell'export (bottom-più-basso meno top-più-alto, convertito in vw).
+- Dentro una sezione, ogni figlio è `position: absolute` con:
+  - `left` **sempre assoluto-di-pagina** (`px/1440*100`, stesso valore
+    per qualsiasi sezione) — così l'allineamento orizzontale fra sezioni
+    diverse resta corretto per costruzione, senza fare i conti a mano.
+  - `top` **relativo all'origine della propria sezione** (il punto più
+    alto del suo contenuto nell'export) — permette a ogni sezione di
+    avere un'altezza propria e di impilarsi in flusso normale.
+- I due divisori orizzontali (`.about-divider`, semplici `<hr>`) NON
+  riproducono il `top` esatto dell'export: la loro posizione è già
+  determinata dai margini delle sezioni adiacenti, bastano margini
+  approssimati (l'export li usa solo come separatori visivi, non hanno
+  bisogno di un `top` pixel-perfect).
+
+## Due pattern di chip, non uno solo — scegliere in base alla sezione
+
+Costruendo About (09/09/2026, due round di revisione) sono emersi DUE
+modi diversi di trattare le etichette-annotazione ("Hope I", "Syndrome",
+"Master of broken hatches", ecc.), a seconda della sezione. Non sono
+intercambiabili — usare quello sbagliato rompe l'effetto voluto.
+
+### 1. Adesivo: copre il testo sotto (solo claim e intro)
+
+Nel claim ("I Know What I'm Doing") e nella riga "As a Junior
+Architect...", i chip sono `position: absolute` e stanno FISICAMENTE
+SOPRA al testo continuo, coprendone parte — il testo di base non ha
+spazi riservati (es. "my HIGHLY ORGANIZED mind is..." per intero), il
+chip con sfondo opaco (`var(--paper)`) maschera le lettere sotto,
+lasciando intravedere solo i frammenti ai lati (es. "...ANIZED",
+"...onstantly..."). Per funzionare il chip deve venire DOPO l'elemento
+che copre nell'ordine del DOM (stacking naturale, nessun z-index). Nel
+claim si ottiene gratis riusando `.hero__chip` dentro una
+`.hero-row--overlay` (si centra da solo con `top:50%`); nell'intro un
+componente dedicato (`.about-intro__chip`) con `top`/`left` propri.
+
+### 2. Incorporato nel testo: scorre come parte della frase (bio, card)
+
+Nella bio ("Main Character"), in Hard Skills e in Education, i chip
+sono invece `<span>` NORMALI dentro il flusso del testo/della lista —
+`position: static; display: inline-flex`, scritti nell'HTML esattamente
+nel punto in cui devono apparire (es. `<li>3D & BIM: ... Sketchup
+<span class="hero__chip">Actively testing...</span></li>`). Vanno a capo
+insieme al testo circostante, non lo coprono mai. Verificato contro uno
+screenshot di riferimento fornito dall'utente (chip che "invadono lo
+spazio come se fossero incorporati nel testo", non sovrapposti).
+Ottenuto con un override scoped: `.about-bio .hero__chip, .about-cards
+.hero__chip { position:static; display:inline-flex; transform:none }`
+— stesso componente `.hero__chip` del pattern 1, cambia solo il
+contesto (dentro `.about-bio`/`.about-cards` invece che dentro una
+`.hero-row--overlay`).
+
+**Come decidere quale usare su una pagina nuova**: se l'export Figma
+mostra il chip sovrapposto a lettere del testo sotto → pattern 1
+(adesivo). Se il chip sta acccostato/dopo un pezzo di testo senza
+coprire nulla, e il testo intorno si riorganizza per fargli spazio →
+pattern 2 (incorporato). Nel dubbio, chiedere: la differenza non è
+sempre ovvia da uno screenshot statico.
+
 ## Bug ricorrenti da NON ripetere
 
 - `position: relative; top: Xvw` non riserva spazio nel flusso
@@ -182,3 +250,11 @@ questo sito puntano entrambe ad Alte Haas Grotesk.
 - Copia-incolla da preview a sito reale: confrontare SEMPRE proprietà
   per proprietà (non a campione) — differenze già capitate: `left`
   del chip, `color`/`border` non aggiornati, dimensione frecce vecchia.
+- Un contenitore con figli `position:absolute; inset:0` (es. immagine +
+  velo di uno slideshow/thumb) DEVE restare `position:relative` (mai
+  `static`) in QUALSIASI breakpoint, anche mobile — se diventa `static`,
+  i figli assoluti "risalgono" al prossimo antenato posizionato e
+  coprono un'area enorme invece di restare dentro il contenitore. Preso
+  e risolto su `.about-hero__thumb` nel breakpoint mobile: la regola
+  sbagliata era `position:static`, corretta in `position:relative` (più
+  `left/top:auto` per annullare l'assoluto desktop).

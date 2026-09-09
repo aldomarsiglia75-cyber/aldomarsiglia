@@ -293,23 +293,118 @@ h1, h2, h3, p, figure, blockquote {
   outline: none;
 }
 
-/* orologio digitale, speculare al logo — stesso margine (destro invece
-   che sinistro), stessa altezza. Aggiornato via nav-clock.js. */
-.nav-clock {
+/* menu a tendina "Contacts", speculare al logo — stesso margine (destro
+   invece che sinistro), stessa altezza del trigger di un .nav-pill.
+   Sostituisce il vecchio orologio (nav-clock.js, rimosso) su richiesta
+   esplicita dell'utente. Apertura al click (non hover, per restare
+   utilizzabile anche su touch), gestita da nav-contacts.js. */
+.nav-contacts {
   position: absolute;
   right: var(--hero-margin);
   top: 50%;
   transform: translateY(-50%);
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
 }
 
-body.journal .nav-clock {
+/* solo l'icona (cerchio con la freccina), niente più testo "Contacts" —
+   richiesto dall'utente. */
+.nav-contacts__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem; /* 24px, come .nav-pill */
+  height: 1.5rem;
+  padding: 0;
+  background: var(--paper);
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nav-contacts__trigger:hover,
+.nav-contacts__trigger:focus-visible {
+  background: var(--accent);
   color: #fff;
+  outline: none;
+}
+
+.nav-contacts.is-open .nav-contacts__trigger {
+  background: var(--accent);
+  color: #fff;
+}
+
+.nav-contacts__chevron {
+  width: 0.5rem;
+  height: 0.35rem;
+  flex: none;
+  transition: transform 0.15s ease;
+}
+
+.nav-contacts.is-open .nav-contacts__chevron {
+  transform: rotate(180deg);
+}
+
+/* pannello sempre rosso pieno con testo bianco (non più bianco con
+   testo rosso) — richiesto dall'utente, coerente col resto del sito
+   dove il rosso pieno è già usato come sfondo (card Hard Skills/
+   Education). Su Journal (pagina già rossa) serve un bordo bianco per
+   restare distinguibile dallo sfondo dietro, vedi sotto. */
+.nav-contacts__panel {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 13rem;
+  padding: 1rem 1.2rem;
+  background: var(--accent);
+  border-radius: 0.9rem;
+}
+
+.nav-contacts__panel[hidden] {
+  display: none;
+}
+
+/* ".site-nav a.nav-contacts__link" e non solo ".nav-contacts__link":
+   ".site-nav a" (classe+elemento) ha più specificità di una singola
+   classe e vincerebbe lui, lasciando questi link nel colore grafite di
+   base invece che bianco — stesso bug/soluzione già noto per
+   .brand-mark/.nav-pill, vedi DESIGN-RULES.md. */
+.site-nav a.nav-contacts__link {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.8075rem; /* 0.85rem - 5% */
+  text-transform: none;
+  letter-spacing: normal;
+  color: #fff;
+  text-decoration: none;
+}
+
+.site-nav a.nav-contacts__link:hover,
+.site-nav a.nav-contacts__link:focus-visible {
+  color: #fff;
+  text-decoration: underline;
+  outline: none;
+}
+
+body.journal .nav-contacts__trigger {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+body.journal .nav-contacts__trigger:hover,
+body.journal .nav-contacts__trigger:focus-visible,
+body.journal .nav-contacts.is-open .nav-contacts__trigger {
+  background: #fff;
+  color: var(--accent);
+}
+
+body.journal .nav-contacts__panel {
+  border: 1px solid #fff;
 }
 
 .nav-pills {
@@ -480,6 +575,14 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   width: 26.667vw; /* 384/1440 */
 }
 
+/* About, riga "I ... Know": la foto piccola tra le due parole — l'altra
+   foto del claim (riga "Doing") riusa .hero-thumb di base senza
+   modificatore, perché la sua larghezza (542/1440) coincide già con
+   quella di Works. */
+.hero-thumb--about {
+  width: 22.431vw; /* 323/1440 */
+}
+
 .hero-thumb__img {
   position: absolute;
   inset: 0;
@@ -627,7 +730,8 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   .hero-thumb,
   .hero-thumb--small,
   .hero-thumb--junior,
-  .hero-thumb--architect {
+  .hero-thumb--architect,
+  .hero-thumb--about {
     width: 100%;
     height: 40vw;
   }
@@ -645,106 +749,10 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   }
 }
 
-/* ---- about: dossier a tre colonne, direttamente in Home ---------------------- */
-
-.about {
-  padding-top: 4.5rem;
-  padding-bottom: 4.5rem;
-  border-bottom: 1px solid var(--line);
-}
-
-.about__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap-lg);
-  align-items: start;
-}
-
-.about__label {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.15rem;
-  margin-bottom: 1.25rem;
-}
-
-.about__col p {
-  font-size: 0.98rem;
-  line-height: 1.6;
-}
-
-.about__col p + p {
-  margin-top: 1rem;
-}
-
-.about__note {
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: var(--stone);
-}
-
-.timeline {
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline__row {
-  display: grid;
-  grid-template-columns: 5rem 1fr;
-  gap: 1rem;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--line);
-  font-size: 0.92rem;
-}
-
-.timeline__row:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-.timeline__date {
-  color: var(--stone);
-  font-size: 0.85rem;
-}
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  height: 2rem;
-  font-size: 0.82rem;
-  color: var(--ink);
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  padding: 0 1.1rem;
-}
-
-.pull-quote {
-  margin-top: 3rem;
-  padding-left: 1.5rem;
-  border-left: 2px solid var(--accent);
-  max-width: 36ch;
-}
-
-.pull-quote p {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: clamp(1.3rem, 3vw, 1.7rem);
-  line-height: 1.35;
-  color: var(--ink);
-}
-
-.pull-quote cite {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  font-style: normal;
-  color: var(--stone);
-}
+/* ---- about: pagina a sé (about.html), export Figma reale 09/09/2026 ----
+   vedi in fondo al file per il blocco ".about-*" con la stessa logica
+   canvas-1440-in-vw di .hero (Works/Home). Il vecchio dossier a 3 colonne
+   dentro Home è stato rimosso insieme a questa pagina. ---- */
 
 /* ---- h-gallery: galleria orizzontale a scroll agganciato, con corsie fisse ---- */
 
@@ -1042,12 +1050,6 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   font-size: 1.6rem;
 }
 
-.subhead {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.3rem;
-}
-
 /* ---- plate: riquadro immagine progetto (Works page) --------------------------- */
 
 .plate {
@@ -1306,65 +1308,6 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   color: var(--stone);
 }
 
-/* ---- contatti: sezione in fondo alla Home ------------------------------------- */
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2rem;
-  align-items: end;
-  flex-wrap: wrap;
-}
-
-.contact-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.contact-list__row {
-  display: grid;
-  grid-template-columns: 6rem 1fr;
-  gap: 1rem;
-  padding: 0.75rem 0;
-  border-top: 1px solid var(--line);
-  font-size: 0.95rem;
-}
-
-.contact-list__row:first-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-.contact-list__label {
-  color: var(--stone);
-  font-size: 0.85rem;
-}
-
-.social-row {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.social-row a {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  text-decoration: none;
-  color: var(--ink);
-  border-bottom: 1px solid var(--line-strong);
-  padding-bottom: 2px;
-}
-
-.social-row a:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-@media (max-width: 640px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ---- ig-grid: griglia di anteprime per Journal/A.matter ------------------------- */
 
 .ig-grid {
@@ -1492,14 +1435,6 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
     --gap-lg: 3rem;
   }
 
-  .about__grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .about__grid .about__col:first-child {
-    grid-column: 1 / -1;
-  }
-
   .h-gallery__item {
     flex-basis: 75vw;
   }
@@ -1528,14 +1463,6 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
 
   .intro {
     padding-top: 4.5rem;
-  }
-
-  .about__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .about__grid .about__col:first-child {
-    grid-column: auto;
   }
 
   /* sotto i 640px la galleria smette di "agganciare" lo scroll verticale:
@@ -1923,5 +1850,334 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
 
   .project-detail__progress {
     display: none;
+  }
+}
+
+/* ================================================================
+   ABOUT — export Figma reale 09/09/2026 (~/Desktop/about).
+   Stessa logica di .hero: canvas di riferimento 1440px, ogni misura
+   (incluse le posizioni verticali, non solo quelle orizzontali) convertita
+   in vw con px/1440*100 — vedi DESIGN-RULES.md. About entra così
+   nell'eccezione "rosso come inchiostro a riposo" già di Home/Works
+   (prima era grafite, in attesa del suo export — vedi
+   [[project_sito_rebuild]]).
+
+   Il claim "I Know What I'm Doing" (09/09/2026, seconda revisione) NON
+   segue più questa logica: su richiesta esplicita dell'utente riusa
+   di peso il componente `.hero`/`.hero-row`/`.hero__title`/`.hero-thumb`/
+   `.hero__chip`/`.hero__arrows` di Works — stesso contenitore a
+   riquadro fisso con bordo (non `.hero--home`), stesse 3 righe flex a
+   baseline, stessa logica di chip-adesivo centrato nella riga invece
+   che di canvas libero.
+
+   .about-intro resta canvas libero (chip-adesivo assoluto sopra al
+   testo, vedi sotto). .about-bio e .about-cards invece (09/09/2026,
+   terza revisione) sono stati convertiti da canvas assoluto a
+   flusso normale (flex + testo/lista veri) perché lì i chip non sono
+   adesivi ma "incorporati nel testo" — vedi DESIGN-RULES.md, sezione
+   "Due pattern di chip".
+   ================================================================ */
+
+/* Claim About = .hero di Works, contenuto diverso. 3 righe:
+   1) "I" — foto (.hero-thumb--about) — "Know", overlay col chip "Hope I"
+   2) "What I'm" — frecce (.hero__arrows, centrate verticalmente nella
+      riga = allineate al centro di "What I'm", richiesto dall'utente)
+   3) foto (.hero-thumb base, stessa larghezza di Works) — "Doing",
+      overlay col chip "Supposed to be" */
+
+.hero__chip--hopei { left: 4.514vw; }
+
+/* "Supposed to be": più in alto del centro della riga di default —
+   richiesto dall'utente, prima 12px (0.833vw), poi abbassato di altri
+   6px su richiesta successiva → 6px (0.417vw) nette sopra il centro. */
+.hero__chip--supposedtobe {
+  left: 49.931vw;
+  top: calc(50% - 0.417vw);
+}
+
+.about-divider {
+  border: none;
+  border-top: 1px solid var(--accent);
+  margin: 4.3vw 0;
+}
+
+.about-intro {
+  position: relative;
+  width: 100%;
+  /* prima questo spazio veniva dal margine del divider fra hero e
+     intro, rimosso perché .hero (riquadro fisso stile Work) disegna
+     già il proprio bordo inferiore come separatore. */
+  margin-top: 4.3vw;
+  /* stesso margine orizzontale delle righe del claim (.hero-row usa
+     padding: 0 var(--hero-margin)) — richiesto dall'utente. */
+  padding: 0 var(--hero-margin);
+}
+
+.about-intro__text {
+  max-width: 1343px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 3.333vw; /* 48px */
+  line-height: 3.472vw; /* 50px */
+  color: var(--accent);
+}
+
+/* etichette della riga "As a Junior Architect...": uniche a 44px invece
+   dei 24px standard (.hero__chip) — richiesto esplicitamente
+   dall'utente, scala proporzionale (44/24) sulle stesse proprietà.
+   Seconda revisione: non più adesivi assoluti ma incorporate nel testo
+   (stesso pattern 2 di bio/card, vedi DESIGN-RULES.md) — "Caffeinated
+   and" scritto nell'HTML tra "my" e "HIGHLY", "Chaotic" tra "ORGANIZED"
+   e "mind", così il testo si dispone naturalmente intorno invece di
+   dover indovinare una posizione assoluta. */
+.about-intro__chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.056vw; /* 44px */
+  padding: 0 1.833vw;
+  background: var(--paper);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 1.65vw;
+  font-weight: 400;
+  color: var(--accent);
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin: 0 0.4vw;
+}
+
+/* .about-bio e .about-cards, seconda revisione (09/09/2026): i chip
+   qui NON sono più adesivi assoluti che coprono il testo (quella resta
+   la logica solo di claim/intro, richiesta esplicita dell'utente
+   confrontata con lo screenshot di riferimento) — sono invece
+   `<span>` inline dentro il testo/la lista stessa, che scorrono e
+   vanno a capo insieme alle parole come fossero incorporati nella
+   frase. Per questo qui .hero__chip torna un elemento di flusso
+   normale (position:static, inline-flex) invece che assoluto. */
+.about-bio .hero__chip,
+.about-cards .hero__chip {
+  position: static;
+  display: inline-flex;
+  transform: none;
+  vertical-align: middle;
+  margin: 0 0.5vw 0.4vw;
+}
+
+/* solo le etichette di Hard Skills/Education, scalate in modo
+   proporzionale rispetto alla base .hero__chip (24px, poi +2px, poi
+   altri +2px → 28px di altezza, scala 28/24 applicata anche a padding
+   e font-size) e abbassate di 2px (position:relative + top) rispetto
+   alla riga di testo — richiesto dall'utente, non tocca le etichette
+   della bio. */
+.about-cards .hero__chip {
+  position: relative;
+  top: 0.139vw; /* 2px */
+  height: 1.944vw; /* 28px */
+  padding: 0 1.167vw;
+  font-size: 1.05vw;
+}
+
+.about-bio {
+  display: flex;
+  align-items: flex-start;
+  gap: 3.472vw; /* 45.139 - 4.167 - 37.5 */
+  padding: 0 4.167vw;
+}
+
+.about-bio__photo {
+  flex: none;
+  width: 37.5vw;
+  height: 37.5vw;
+  object-fit: cover;
+  border-radius: 2.778vw; /* 40px */
+}
+
+.about-bio__text {
+  flex: 1 1 auto;
+  max-width: 49.861vw; /* 718px */
+  margin-top: 12.917vw; /* stessa quota della testa "Main Character" nell'export */
+}
+
+.about-bio__heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.5vw; /* 36px */
+  line-height: 1;
+  color: var(--accent);
+  margin: 0 0 0.9vw;
+}
+
+.about-bio__body {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.667vw; /* 24px */
+  line-height: 1.944vw; /* 28px */
+  color: var(--accent);
+  margin: 0 0 1vw;
+}
+
+/* "Syndrome": spostato 12px a sinistra rispetto al margine di default
+   del chip inline. "Thanks to...": alzato di 6px. Entrambi tornano a
+   opacità 100% (prima ereditavano lo 0.8 di heading/body). */
+.about-bio__chip--syndrome {
+  /* base (0.5vw/7.2px) - 12px - 12px - 24px: può sovrapporsi a "Main
+     Character", confermato dall'utente — nessun problema, il chip
+     resta inline-flex quindi si sovrappone naturalmente al testo
+     precedente restando sopra nell'ordine di stacking del DOM. */
+  margin-left: -2.833vw;
+  opacity: 1;
+}
+
+.about-bio__chip--thanks {
+  position: relative;
+  top: -2.083vw; /* 6px + 12px + altri 12px */
+  opacity: 1;
+}
+
+.about-bio__body strong {
+  font-weight: 700;
+}
+
+.about-cards {
+  display: flex;
+  gap: 4.236vw; /* 55.903 - 4.583 - 47.083 */
+  padding-left: 4.583vw;
+  margin-top: 3.333vw; /* 48px: 36px iniziali + altri 12px richiesti dall'utente */
+}
+
+.about-card {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  /* testo + etichette centrati nel riquadro, sia in orizzontale che in
+     verticale — richiesto dall'utente, sostituisce il vecchio inset
+     asimmetrico left-only ripreso 1:1 dall'export Figma. */
+  align-items: center;
+  justify-content: center;
+  border-radius: 2.778vw; /* 40px */
+  background: var(--accent);
+  padding: 2vw;
+}
+
+.about-card--skills { width: 47.083vw; }
+.about-card--education { width: 37.5vw; }
+
+.about-card__heading {
+  max-width: 34.167vw; /* 492px */
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.5vw; /* 36px */
+  line-height: 1;
+  color: #fff;
+  margin: 0 0 1.6vw;
+}
+
+.about-card__body {
+  max-width: 34.167vw; /* 492px */
+  list-style: disc;
+  padding-left: 1.1em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.667vw; /* 24px */
+  line-height: 1.944vw; /* 28px */
+  color: #fff;
+}
+
+.about-card__body li {
+  margin-bottom: 1vw;
+}
+
+.about-card .hero__chip { color: var(--accent); }
+
+@media (max-width: 640px) {
+  /* sotto i 640px il canvas-in-vw diventa illeggibile (stesso limite di
+     .hero, vedi sopra): le sezioni About passano a un impilamento
+     verticale semplice in rem, in ordine di lettura naturale del markup.
+     Il claim (ora .hero/.hero-row/.hero-thumb/.hero__chip identici a
+     Work) eredita gratis il comportamento mobile già definito per quel
+     componente più sopra nel file — nessuna regola about-specific qui. */
+
+  .about-intro {
+    margin-top: 2rem;
+    padding: 0 1.25rem;
+  }
+
+  .about-intro__text {
+    width: auto;
+    font-size: 7vw;
+    line-height: 1.3;
+  }
+
+  .about-intro__chip {
+    height: auto;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+  }
+
+  .about-bio {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1.25rem;
+  }
+
+  .about-bio__photo {
+    width: 100%;
+    height: 70vw;
+  }
+
+  .about-bio__text {
+    max-width: none;
+    margin-top: 0;
+  }
+
+  .about-bio__heading {
+    font-size: 1.5rem;
+  }
+
+  .about-bio__body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .about-cards {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-left: 0;
+  }
+
+  .about-card {
+    width: 100% !important;
+    /* sotto i 640px il centraggio desktop torna a un blocco allineato a
+       sinistra: una lista puntata centrata è illeggibile su mobile. */
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2rem 1.25rem;
+  }
+
+  .about-card__heading,
+  .about-card__body {
+    max-width: none;
+  }
+
+  .about-card__heading {
+    font-size: 1.5rem;
+  }
+
+  .about-card__body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .about-bio .hero__chip,
+  .about-cards .hero__chip {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    height: auto;
   }
 }

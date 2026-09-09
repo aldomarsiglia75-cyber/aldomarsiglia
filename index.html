@@ -15,10 +15,19 @@
 
   <nav class="site-nav" aria-label="Navigazione principale">
     <a href="index.html" class="brand-mark" aria-label="Aldo Marsiglia — Home">AM</a>
-    <span class="nav-clock" aria-hidden="true"></span>
+    <div class="nav-contacts">
+      <button type="button" class="nav-contacts__trigger" aria-expanded="false" aria-controls="nav-contacts-panel" aria-label="Contacts">
+      <svg class="nav-contacts__chevron" viewBox="0 0 10 6" aria-hidden="true"><polyline points="1,1 5,5 9,1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+      <div class="nav-contacts__panel" id="nav-contacts-panel" hidden>
+        <a class="nav-contacts__link" href="mailto:aldomarsiglia75@gmail.com">aldomarsiglia75@gmail.com</a>
+        <a class="nav-contacts__link" href="https://www.instagram.com/aldomarsiglia_/" target="_blank" rel="noopener">Instagram</a>
+        <a class="nav-contacts__link" href="https://pin.it/Y6C967QTH" target="_blank" rel="noopener">Pinterest</a>
+      </div>
+    </div>
     <div class="nav-pills">
         <a href="progetti.html" class="nav-pill">Work</a>
-        <a href="index.html#about" class="nav-pill">About</a>
+        <a href="about.html" class="nav-pill">About</a>
         <a href="journal.html" class="nav-pill">Journal</a>
     </div>
   </nav>
@@ -62,83 +71,6 @@
     </div>
   </section>
 
-  <section class="about" id="about">
-    <div class="wrap about__grid">
-
-      <div class="about__col">
-        <h2 class="about__label">Chi sono</h2>
-        <p>Sono Aldo Marsiglia, 22 anni. Ho conseguito la laurea triennale in Progettazione dell'Architettura al Politecnico di Milano e sto proseguendo con la laurea magistrale in Architettura e Spazio Interno, sempre al Politecnico.</p>
-        <p>Mi occupo di progettazione residenziale e di interni, con un'attenzione particolare a luce naturale, materiali e modo d'uso reale degli spazi — dal rilievo al concept, fino alla rappresentazione tecnica del progetto.</p>
-      </div>
-
-      <div class="about__col">
-        <h2 class="about__label">Formazione</h2>
-        <div class="timeline">
-          <div class="timeline__row">
-            <span class="timeline__date">2025 —</span>
-            <span>Politecnico di Milano — Laurea Magistrale, Architettura e Spazio Interno</span>
-          </div>
-          <div class="timeline__row">
-            <span class="timeline__date">2022–25</span>
-            <span>Politecnico di Milano — Laurea Triennale, Progettazione dell'Architettura</span>
-          </div>
-          <div class="timeline__row">
-            <span class="timeline__date">2017–22</span>
-            <span>Liceo Classico e Musicale "Empedocle"</span>
-          </div>
-        </div>
-        <p class="about__note">Extra — Progetto del Prodotto d'Arredo, Prof. Michele Marelli, Politecnico di Milano (09/2024–01/2025)</p>
-      </div>
-
-      <div class="about__col">
-        <h2 class="about__label">Competenze</h2>
-        <div class="tag-list">
-          <span class="tag">AutoCAD</span>
-          <span class="tag">Revit</span>
-          <span class="tag">SketchUp</span>
-          <span class="tag">Rhinoceros</span>
-          <span class="tag">V-Ray</span>
-          <span class="tag">Lumion</span>
-          <span class="tag">D5 Render</span>
-          <span class="tag">Twinmotion</span>
-          <span class="tag">Adobe Creative Suite</span>
-          <span class="tag">Rilievo laser</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="wrap">
-      <blockquote class="pull-quote">
-        <p>God is in the details.</p>
-        <cite>— Mies van der Rohe</cite>
-      </blockquote>
-    </div>
-  </section>
-
-  <section class="section wrap" id="contatti">
-    <h2 class="subhead">Contatti</h2>
-    <div class="contact-grid" style="margin-top: 1.5rem;">
-      <div class="contact-list">
-        <div class="contact-list__row">
-          <span class="contact-list__label">Nome</span>
-          <span>Aldo Marsiglia</span>
-        </div>
-        <div class="contact-list__row">
-          <span class="contact-list__label">Email</span>
-          <span><a href="mailto:aldomarsiglia75@gmail.com">aldomarsiglia75@gmail.com</a></span>
-        </div>
-        <div class="contact-list__row">
-          <span class="contact-list__label">Sede</span>
-          <span>Milano</span>
-        </div>
-      </div>
-      <div class="social-row">
-        <a href="https://www.instagram.com/aldomarsiglia_/" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://pin.it/Y6C967QTH" target="_blank" rel="noopener">Pinterest</a>
-      </div>
-    </div>
-  </section>
 
 </main>
 
@@ -148,14 +80,14 @@
       <a href="index.html" class="site-footer__brand">Aldo Marsiglia</a>
       <div class="site-footer__meta">Portfolio / Archivio</div>
     </div>
-    <div class="site-footer__meta">© 2026 — <a href="#contatti">Contacts</a></div>
+    <div class="site-footer__meta">© 2026</div>
   </div>
 </footer>
 
-<p class="colophon">Aggiornato — 04.09.2026</p>
+<p class="colophon">Aggiornato — 09.09.2026 — Made with Figma + VS Code</p>
 
 <script src="cursor.js"></script>
-<script src="nav-clock.js"></script>
+<script src="nav-contacts.js"></script>
 <script src="hero-slideshow.js"></script>
 
 </body>

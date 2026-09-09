@@ -4,7 +4,7 @@
    da Figma della pagina Works (vedi [[project_sito_rebuild]]): carta bianca
    (#F8F8F8), il rosso (#CC0000) è l'inchiostro principale del testo su
    Works (titoli, nav, nomi progetto), il grafite (#2F2F2F) resta per le
-   pagine non ancora riprese da Figma (Home/About/Journal). Font: Alte Haas
+   pagine non ancora riprese da Figma (Home/About/Magazine). Font: Alte Haas
    Grotesk (bold per i titoli enormi, regular per i nomi lista).
    ========================================================================== */
 
@@ -72,62 +72,52 @@
   --nav-h: 5.5rem;
 }
 
-/* ---- journal: pagina rossa, unica eccezione alla palette neutra del sito ------
+/* ---- magazine: pagina rossa, unica eccezione alla palette neutra del sito ------
    Qui il rosso non è uno stato interattivo ma il colore di fondo della pagina:
    di conseguenza gli stati interattivi (hover, nav corrente, cursore, selezione)
    passano al grafite scuro / bianco per restare leggibili e riconoscibili. */
 
-body.journal {
+body.magazine {
   background: var(--accent);
   color: #fff;
 }
 
-body.journal .site-nav {
-  background: var(--accent);
-}
+/* niente sfondo opaco: la nav deve restare "vetro" anche qui, la griglia
+   di debug (bianca su Magazine) deve continuare a vedersi anche dentro
+   la nav — richiesto dall'utente, prima la nav era rosso pieno e la
+   copriva (stessa logica delle altre pagine, vedi .site-nav sopra). */
 
-body.journal .site-nav a {
+body.magazine .site-nav a {
   color: #fff;
 }
 
-body.journal .site-nav a:hover,
-body.journal .site-nav a:focus-visible {
+body.magazine .site-nav a:hover,
+body.magazine .site-nav a:focus-visible {
   color: var(--ink);
 }
 
-body.journal .page-header__lead {
+body.magazine .site-footer__brand {
+  color: #fff;
+}
+
+body.magazine .site-footer__meta {
   color: rgba(255, 255, 255, 0.75);
 }
 
-body.journal .scale-rule {
-  background:
-    repeating-linear-gradient(to right, #fff 0, #fff 1px, transparent 1px, transparent 28px)
-    bottom / 100% 8px no-repeat,
-    linear-gradient(#fff, #fff) bottom / 100% 1px no-repeat;
-}
-
-body.journal .ig-grid__item {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-body.journal .site-footer__meta {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-body.journal .site-footer a:hover {
+body.magazine .site-footer a:hover {
   color: var(--ink);
 }
 
-body.journal .colophon {
+body.magazine .colophon {
   color: rgba(255, 255, 255, 0.7);
 }
 
-body.journal ::selection {
+body.magazine ::selection {
   background: #fff;
   color: var(--accent);
 }
 
-body.journal .cursor-dot {
+body.magazine .cursor-dot {
   background: #fff;
 }
 
@@ -196,20 +186,6 @@ h1, h2, h3, p, figure, blockquote {
   padding-right: var(--edge);
 }
 
-.scale-rule {
-  height: 8px;
-  background:
-    repeating-linear-gradient(
-      to right,
-      var(--ink) 0,
-      var(--ink) 1px,
-      transparent 1px,
-      transparent 28px
-    )
-    bottom / 100% 8px no-repeat,
-    linear-gradient(var(--ink), var(--ink)) bottom / 100% 1px no-repeat;
-}
-
 /* ---- site-nav: barra sempre presente, "aggancia" la cima dello schermo ------
    Sulla Home segue il blocco .intro e vi si "attacca" solo una volta
    raggiunta la cima (position: sticky) — su tutte le altre pagine è la
@@ -220,8 +196,8 @@ h1, h2, h3, p, figure, blockquote {
    (preview-works-test.html) — non resta agganciata in cima allo schermo. */
 /* sfondo trasparente apposta: sulle pagine con la griglia di debug (vedi
    .debug-grid sopra) deve continuare a vedersi anche dentro la nav, non
-   solo sotto — uno sfondo opaco qui la coprirebbe. Journal la reimposta
-   comunque a rosso pieno più sotto. */
+   solo sotto — uno sfondo opaco qui la coprirebbe. Vale anche su Magazine
+   (richiesto dall'utente, prima la nav aveva rosso pieno e la copriva). */
 .site-nav {
   position: relative;
   z-index: 50;
@@ -348,7 +324,7 @@ h1, h2, h3, p, figure, blockquote {
 /* pannello sempre rosso pieno con testo bianco (non più bianco con
    testo rosso) — richiesto dall'utente, coerente col resto del sito
    dove il rosso pieno è già usato come sfondo (card Hard Skills/
-   Education). Su Journal (pagina già rossa) serve un bordo bianco per
+   Education). Su Magazine (pagina già rossa) serve un bordo bianco per
    restare distinguibile dallo sfondo dietro, vedi sotto. */
 .nav-contacts__panel {
   position: absolute;
@@ -390,21 +366,29 @@ h1, h2, h3, p, figure, blockquote {
   outline: none;
 }
 
-body.journal .nav-contacts__trigger {
+body.magazine .nav-contacts__trigger {
   background: transparent;
   color: #fff;
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-body.journal .nav-contacts__trigger:hover,
-body.journal .nav-contacts__trigger:focus-visible,
-body.journal .nav-contacts.is-open .nav-contacts__trigger {
+body.magazine .nav-contacts__trigger:hover,
+body.magazine .nav-contacts__trigger:focus-visible,
+body.magazine .nav-contacts.is-open .nav-contacts__trigger {
   background: #fff;
   color: var(--accent);
 }
 
-body.journal .nav-contacts__panel {
-  border: 1px solid #fff;
+/* pannello invertito rispetto alla base (bianco/testo rosso invece di
+   rosso/testo bianco): su fondo già rosso un pannello rosso pieno
+   sparirebbe, richiesto dall'utente. */
+body.magazine .nav-contacts__panel {
+  background: #fff;
+  border: 1px solid var(--accent);
+}
+
+body.magazine .site-nav a.nav-contacts__link {
+  color: var(--accent);
 }
 
 .nav-pills {
@@ -448,29 +432,29 @@ body.journal .nav-contacts__panel {
   font-weight: 700;
 }
 
-body.journal .site-nav a.brand-mark {
+body.magazine .site-nav a.brand-mark {
   color: #fff;
 }
 
-body.journal .site-nav a.brand-mark:hover,
-body.journal .site-nav a.brand-mark:focus-visible {
+body.magazine .site-nav a.brand-mark:hover,
+body.magazine .site-nav a.brand-mark:focus-visible {
   opacity: 1;
   color: var(--ink);
 }
 
-body.journal .site-nav a.nav-pill {
+body.magazine .site-nav a.nav-pill {
   background: transparent;
   color: #fff;
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-body.journal .site-nav a.nav-pill:hover,
-body.journal .site-nav a.nav-pill:focus-visible {
+body.magazine .site-nav a.nav-pill:hover,
+body.magazine .site-nav a.nav-pill:focus-visible {
   background: #fff;
   color: var(--accent);
 }
 
-body.journal .site-nav a.nav-pill[aria-current="page"] {
+body.magazine .site-nav a.nav-pill[aria-current="page"] {
   background: #fff;
   border-color: #fff;
   color: var(--accent);
@@ -506,6 +490,15 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   background-image:
     repeating-linear-gradient(to right, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px),
     repeating-linear-gradient(to bottom, rgba(204, 0, 0, 0.5) 0 1px, transparent 1px 12px);
+}
+
+/* su fondo rosso le righe rosse della griglia sparirebbero: qui diventa
+   bianca, opacità 20% richiesta dall'utente (prima 40%, poi abbassata). */
+body.magazine .debug-grid {
+  opacity: 0.2;
+  background-image:
+    repeating-linear-gradient(to right, rgba(255, 255, 255, 1) 0 1px, transparent 1px 12px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 1) 0 1px, transparent 1px 12px);
 }
 
 /* ---- hero Works: "A Few Of My Selected Works" — misure in scala esatta
@@ -1005,7 +998,7 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   }
 }
 
-/* ---- generic page header (Works, Journal) ------------------------------------ */
+/* ---- generic page header (Works, Magazine) ------------------------------------ */
 
 .page-header {
   padding-top: 4.5rem;
@@ -1308,38 +1301,458 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   color: var(--stone);
 }
 
-/* ---- ig-grid: griglia di anteprime per Journal/A.matter ------------------------- */
+/* ---- magazine: ricostruzione da export Figma reale (09/09/2026) ---------------
+   Fase 2, testi reali — tre screenshot forniti dall'utente come
+   riferimento vincolante ("seguile come bibbia"), più
+   figma-assets/magazine/index.html come export statico di appoggio.
+   Stessa logica di margine/ritmo di About: canvas di riferimento 1440px,
+   tutto a scala vw, margine laterale = var(--hero-margin) (48px a 1440,
+   come nav/hero/footer sitewide, non .wrap/--edge), passo verticale fra
+   sezioni = 4.3vw (lo stesso di .about-divider/.about-intro).
+   Chip: stesso ragionamento di About (DESIGN-RULES.md, "Due pattern di
+   chip") — qui sempre pattern 2, incorporati nel testo (`.hero__chip`
+   riusato con lo stesso override position:static/inline-flex di
+   .about-bio/.about-cards, scoped alle sezioni magazine sotto). Colore
+   testo bianco su fondo rosso = stesso rovesciamento già usato in
+   .about-card (rosso pieno, testo bianco, chip bianco/testo rosso). ---- */
 
-.ig-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+.magazine-section {
+  padding: 0 var(--hero-margin);
+  margin-top: 4.3vw;
 }
 
-.ig-grid__item {
-  position: relative;
-  display: block;
-  aspect-ratio: 1;
+.magazine-section:first-child {
+  margin-top: 0;
+}
+
+/* riga divisoria semplice, non il "righello" .scale-rule usato altrove —
+   richiesto dall'utente al posto suo. Come .about-divider: full-bleed
+   (nessun padding laterale, tocca i bordi del viewport, per questo sta
+   fuori da .magazine-section) con margine verticale proprio; la
+   .magazine-section che segue non aggiunge un secondo margine sopra. */
+.magazine-divider {
+  border: none;
+  border-top: 1px solid #fff;
+  margin: 4.3vw 0;
+}
+
+.magazine-divider + .magazine-section {
+  margin-top: 0;
+}
+
+/* chip incorporati nel testo (pattern 2): stesso override di
+   .about-bio/.about-cards, qui su tutte e tre le sezioni di testo. Il
+   colore resta quello di base di .hero__chip (var(--accent)): pillola
+   bianca, testo rosso, leggibile allo stesso modo su fondo rosso. */
+.magazine-intro .hero__chip,
+.magazine-statement .hero__chip,
+.magazine-formats .hero__chip {
+  position: static;
+  display: inline-flex;
+  transform: none;
+  vertical-align: middle;
+  margin: 0 0.4vw 0.3vw;
+}
+
+/* -- claim: "EVERY SPACE ↓↓↓ IS A.MATTER" + foto + 3 swatch colore
+   (Rectangle 8/9/10 dell'export, uniche già a colore fisso in Figma) --
+   Foto centrata sopra, non più accostata al testo: composizione nuova
+   richiesta dall'utente (vedi screenshot 19.05.34), non quella
+   dell'export Figma originale (foto e testo affiancati). */
+
+/* tutto il claim (video + scritte) deve stare nella prima schermata,
+   sotto la nav — richiesto dall'utente. height (non min-height): il
+   contenitore è alto esattamente lo spazio rimasto sotto la nav, la
+   foto/video (flex:1, sotto) si restringe o si allunga per riempirlo
+   sempre esattamente, qualunque proporzione abbia la finestra. */
+.magazine-claim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - var(--nav-h));
+}
+
+/* rettangolo come maschera di ritaglio per il video: overflow:hidden +
+   border-radius tagliano il video in un rounded-rect, stesso ingombro
+   di prima. Sfondo scuro di fallback finché il video non ha ancora un
+   frame pronto. */
+/* altezza flessibile invece di 35vw fisso: su schermi larghi e bassi
+   35vw supererebbe lo spazio verticale disponibile e farebbe uscire il
+   claim dalla prima schermata. Riempie lo spazio che resta sopra/sotto
+   le scritte (altezza fissa, in vw) dentro il contenitore alto esatto
+   100vh - nav — richiesto dall'utente. La larghezza resta 28.333vw
+   (proporzione orizzontale dell'export Figma), l'altezza segue quella. */
+.magazine-claim__photo {
+  width: 28.333vw; /* 408/1440 */
+  flex: 1 1 auto;
+  min-height: 0;
+  border-radius: 1.5vw;
   overflow: hidden;
-  background: var(--ink);
+  background: #292a6f;
 }
 
-.ig-grid__item img,
-.ig-grid__item video {
+.magazine-claim__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.ig-grid__badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+.magazine-claim__headline {
+  width: 100%;
+  margin-top: 3.5vw;
+}
+
+/* flex-start + gap, non più space-between: con questi font-size la
+   larghezza reale del testo (metriche del font caricato) supera quella
+   misurata sull'export Figma e "EVERY SPACE" + frecce spinte a destra
+   uscivano dal margine (overflow orizzontale, scrollbar indesiderata).
+   Frecce/parole restano accostate invece che spinte ai due bordi. */
+/* space-between (non flex-start): il primo elemento resta al margine
+   sinistro (stesso di --hero-margin usato dal logo "AM"), l'ultimo va a
+   filo del margine destro (stesso del pulsante Contacts) — richiesto
+   dall'utente. gap resta come minimo di sicurezza, non serve più per lo
+   spazio "a riposo" fra le parole. */
+.magazine-claim__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1vw;
+}
+
+.magazine-claim__line + .magazine-claim__line {
+  margin-top: -0.8vw; /* passo stretto fra le due righe, come .hero-row */
+  align-items: center;
+  gap: 0.8vw;
+}
+
+.magazine-claim__words {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-size: 11.745vw; /* 169.13/1440, stessa scala di .hero__title */
+  line-height: 1;
   color: #fff;
-  font-size: 0.7rem;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
+  white-space: nowrap;
+}
+
+.magazine-claim__words strong {
+  font-weight: 700;
+}
+
+/* wordmark "A.MATTER": dimensione e tracking propri, diversi dal resto
+   della riga — 180.4px (12.528vw) e letter-spacing -46%, letti dal file
+   Figma originale (l'export statico non li riportava). */
+.magazine-claim__amatter {
+  font-size: 12.528vw; /* 180.4/1440 */
+}
+
+/* più piccole della base di .hero__arrows (usata su About): a quella
+   dimensione "EVERY SPACE" + frecce non ci stava nella riga e usciva
+   dal margine destro (overflow orizzontale). */
+.magazine-claim__arrows {
+  flex: none;
+  gap: 0.9vw;
+  color: #fff;
+}
+
+.magazine-claim__arrows .hero__arrow {
+  width: 4vw;
+  height: 5.7vw;
+}
+
+.magazine-claim__swatches {
+  display: flex;
+  align-items: center;
+  gap: 0.8vw;
+}
+
+/* rettangoli-icona: sedia/lampada/sedia in loop (stesso meccanismo di
+   .hero-thumb — data-slideshow + hero-slideshow.js, fade ogni 1200ms —
+   qui senza velo rosso di .hero-thumb__tint: sono già silhouette
+   bianche, non foto con "colore reale" da svelare al hover). Misura
+   rimpicciolita rispetto a quella dell'export (94x120/1440): con
+   "A.MATTER" a 180.4px senza compressione la riga non ci stava più. */
+/* resta un solo rettangolo (i due interni sono stati rimossi, richiesto
+   dall'utente): tutte e 12 le icone si alternano qui dentro invece che
+   su 3 box separati. */
+.magazine-claim__swatch {
+  position: relative;
+  top: 0.833vw; /* 12px, abbassato richiesto dall'utente */
+  width: 6.276vw; /* 5.457vw +15% (quarta volta, richiesto dall'utente) */
+  height: 8.369vw; /* 7.277vw +15% */
+  overflow: hidden;
+}
+
+.magazine-claim__swatch .hero-thumb__img {
+  object-fit: contain;
+}
+
+/* -- intro: "Welcome to my [Magazine]. Expect... a lot of [Probably
+   unnecessary] analysis..." — chip grandi come .about-intro__chip -- */
+
+.magazine-intro__text {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 3.333vw; /* 48px, come .about-intro__text */
+  line-height: 1.2;
+  color: #fff;
+  margin: 0;
+}
+
+.magazine-intro .hero__chip {
+  height: 3.056vw; /* 44/1440, come .about-intro__chip */
+  padding: 0 1.833vw;
+  font-size: 1.65vw;
+}
+
+/* -- statement: foto + "Architectural Matter" — stesso layout a riga di
+   .about-bio (foto a sinistra, testo a destra) -- */
+
+.magazine-statement {
+  display: flex;
+  /* testo ancorato in basso: l'ultima riga deve arrivare a filo del
+     bordo inferiore della foto gialla, richiesto dall'utente (prima
+     flex-start, testo e foto allineati in alto). */
+  align-items: flex-end;
+  gap: 3.472vw; /* stesso gap di .about-bio */
+}
+
+/* stesso trattamento del rettangolo blu del claim: maschera di ritaglio
+   per un video invece di un colore pieno — overflow:hidden ritaglia il
+   video (.magazine-claim__video, riusata) nella forma rounded-rect. */
+.magazine-statement__photo {
+  flex: none;
+  width: 37.5vw; /* stessa larghezza di .about-bio__photo */
+  height: 37.5vw;
+  border-radius: 2.778vw;
+  overflow: hidden;
+  background: #eeee0a;
+}
+
+.magazine-statement__text {
+  flex: 1 1 auto;
+  max-width: 49.861vw; /* 718px, come .about-bio__text */
+}
+
+.magazine-statement__heading {
+  margin: 0 0 0.9vw;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.5vw; /* 36px, come .about-bio__heading */
+  line-height: 1;
+  color: #fff;
+}
+
+.magazine-statement__body {
+  margin: 0 0 1vw;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.667vw; /* 24px, come .about-bio__body */
+  line-height: 1.944vw; /* 28px */
+  color: #fff;
+}
+
+.magazine-statement__body strong {
+  font-weight: 700;
+}
+
+.magazine-statement .hero__chip {
+  margin: 0 0 1vw;
+}
+
+/* misure esatte richieste dall'utente (canvas 1440, come il resto della
+   pagina): font 16px, pillole 140x24 / 720x24. Larghezza fissa, non più
+   a contenuto: "NOT A MOODBOARD" da sola è già più larga di 140px (157px
+   circa con questo font) — nessun padding, il testo esce leggermente ai
+   lati invece di restringersi o andare a capo, richiesto dall'utente. */
+.magazine-chip--tag,
+.magazine-chip--sponsor {
+  height: 1.75vw; /* 1.667vw +5%, richiesto dall'utente */
+  padding: 0;
+  font-size: 1.167vw; /* 1.111vw +5% */
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.magazine-chip--tag {
+  width: 10.208vw; /* 9.722vw +5% */
+}
+
+.magazine-chip--sponsor {
+  width: 52.5vw; /* 50vw +5% */
+}
+
+/* -- formats: "Main Format" + griglia a 3 colonne (A.Question/
+   A.Casestudy/A.Story) — colonne 360px, passo 492px su canvas 1440,
+   come l'export -- */
+
+.magazine-formats__label {
+  margin: 0 0 3vw;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.5vw; /* 36px */
+  line-height: 1;
+  color: #fff;
+}
+
+.magazine-formats__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 25vw); /* 360/1440 */
+  gap: 0 9.167vw; /* (492-360)/1440 */
+}
+
+.format-card__label {
+  margin: 0 0 1.2vw;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2.326vw; /* 33.5px/1440, richiesto dall'utente */
+  color: #fff;
+}
+
+.format-card__image {
+  height: 41.667vw; /* 600/1440 */
+  border-radius: 2vw;
+}
+
+.format-card__image--orange { background: #ff7b00; }
+.format-card__image--green { background: #5d994e; }
+.format-card__image--purple { background: #bb1fe6; }
+
+.format-card__heading {
+  margin: 1.4vw 0 0.6vw;
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1.667vw; /* 24px */
+  line-height: 1.1;
+  color: #fff;
+}
+
+.format-card__text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.389vw; /* 20px */
+  line-height: 1.667vw; /* 24px */
+  color: #fff;
+}
+
+.format-card__text strong {
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .magazine-section {
+    padding: 0 1.25rem;
+    margin-top: 3rem;
+  }
+
+  /* sotto i 640px niente vincolo di prima-schermata: la foto torna a
+     un'altezza fissa e la sezione scorre liberamente come il resto del
+     sito in mobile. */
+  .magazine-claim {
+    height: auto;
+  }
+
+  .magazine-claim__photo {
+    flex: none;
+    width: 100%;
+    height: 70vw;
+  }
+
+  .magazine-claim__headline {
+    margin-top: 2rem;
+  }
+
+  .magazine-claim__line {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  .magazine-claim__line + .magazine-claim__line {
+    margin-top: 1rem;
+  }
+
+  .magazine-claim__words {
+    font-size: 12vw;
+    white-space: normal;
+  }
+
+  .magazine-claim__arrows {
+    display: none;
+  }
+
+  .magazine-claim__swatch {
+    width: 16vw;
+    height: 20vw;
+  }
+
+  .magazine-intro__text {
+    font-size: 7vw;
+    line-height: 1.3;
+  }
+
+  .magazine-intro .hero__chip {
+    height: auto;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .magazine-statement {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .magazine-statement__photo {
+    width: 100%;
+    height: 70vw;
+  }
+
+  .magazine-statement__text {
+    max-width: none;
+  }
+
+  .magazine-statement__heading {
+    font-size: 1.6rem;
+  }
+
+  .magazine-statement__body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .magazine-formats__grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem 0;
+  }
+
+  .format-card__image {
+    height: 90vw;
+  }
+
+  .format-card__heading {
+    font-size: 1.3rem;
+  }
+
+  .format-card__text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .magazine-intro .hero__chip,
+  .magazine-statement .hero__chip,
+  .magazine-formats .hero__chip {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    height: auto;
+  }
 }
 
 /* ---- footer ------------------------------------------------------------------ */

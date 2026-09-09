@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magazine — Aldo Marsiglia</title>
+<meta name="description" content="Magazine — A.matter, progetto editoriale di Aldo Marsiglia su architettura, design e cultura del progetto.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="magazine">
+
+<div class="debug-grid"></div>
+
+<nav class="site-nav" aria-label="Navigazione principale">
+  <a href="index.html" class="brand-mark" aria-label="Aldo Marsiglia — Home">AM</a>
+  <div class="nav-contacts">
+    <button type="button" class="nav-contacts__trigger" aria-expanded="false" aria-controls="nav-contacts-panel" aria-label="Contacts">
+      <svg class="nav-contacts__chevron" viewBox="0 0 10 6" aria-hidden="true"><polyline points="1,1 5,5 9,1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="nav-contacts__panel" id="nav-contacts-panel" hidden>
+      <a class="nav-contacts__link" href="mailto:aldomarsiglia75@gmail.com">aldomarsiglia75@gmail.com</a>
+      <a class="nav-contacts__link" href="https://www.instagram.com/aldomarsiglia_/" target="_blank" rel="noopener">Instagram</a>
+      <a class="nav-contacts__link" href="https://pin.it/Y6C967QTH" target="_blank" rel="noopener">Pinterest</a>
+    </div>
+  </div>
+  <div class="nav-pills">
+      <a href="progetti.html" class="nav-pill">Work</a>
+      <a href="about.html" class="nav-pill">About</a>
+      <a href="magazine.html" class="nav-pill" aria-current="page">Magazine</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Ricostruzione da figma-assets/magazine/index.html + 3 screenshot
+       forniti dall'utente (19.05.34/39/45) come riferimento vincolante
+       per testi e impaginazione. Margini/ritmo come About (scala vw su
+       canvas 1440), chip incorporati nel testo (pattern 2, vedi
+       DESIGN-RULES.md). Foto ancora segnaposto a colore fisso: nessuna
+       immagine reale ancora scelta. -->
+
+  <section class="magazine-section magazine-claim">
+    <div class="magazine-claim__photo">
+      <video class="magazine-claim__video" src="magazine/claim-reel.mp4" autoplay loop muted playsinline></video>
+    </div>
+    <div class="magazine-claim__headline">
+      <div class="magazine-claim__line">
+        <p class="magazine-claim__words">Every Space</p>
+        <div class="hero__arrows magazine-claim__arrows" aria-hidden="true">
+          <svg class="hero__arrow" viewBox="0 0 24 34"><line x1="12" y1="0" x2="12" y2="24" stroke="currentColor" stroke-width="3"/><polyline points="4,17 12,26 20,17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="hero__arrow" viewBox="0 0 24 34"><line x1="12" y1="0" x2="12" y2="24" stroke="currentColor" stroke-width="3"/><polyline points="4,17 12,26 20,17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="hero__arrow" viewBox="0 0 24 34"><line x1="12" y1="0" x2="12" y2="24" stroke="currentColor" stroke-width="3"/><polyline points="4,17 12,26 20,17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="magazine-claim__line">
+        <div class="magazine-claim__swatches">
+          <div class="magazine-claim__swatch" data-slideshow>
+            <img class="hero-thumb__img is-active" src="figma-assets/magazine/icons-chair-1/01.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-lamp/01.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-chair-1/02.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-lamp/02.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-chair-1/03.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-lamp/03.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-chair-2/01.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-lamp/04.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-chair-2/02.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-lamp/05.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-chair-2/03.png" alt="">
+            <img class="hero-thumb__img" src="figma-assets/magazine/icons-lamp/06.png" alt="">
+          </div>
+        </div>
+        <p class="magazine-claim__words">Is <strong class="magazine-claim__amatter">A.Matter</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="magazine-divider">
+
+  <section class="magazine-section magazine-intro">
+    <p class="magazine-intro__text">Welcome to my <span class="hero__chip">Magazine</span>. Expect unsolicited opinions on spatial sociology, deep dives into architectural curation, and a lot of <span class="hero__chip">Probably unnecessary</span> analysis on why everyday spaces matter.</p>
+  </section>
+
+  <hr class="magazine-divider">
+
+  <section class="magazine-section magazine-statement">
+    <div class="magazine-statement__photo">
+      <video class="magazine-claim__video" src="magazine/statement-reel.mp4" autoplay loop muted playsinline></video>
+    </div>
+    <div class="magazine-statement__text">
+      <h2 class="magazine-statement__heading">Architectural Matter <span class="hero__chip magazine-chip--tag">Not a moodboard</span></h2>
+      <p class="magazine-statement__body">This is not another interior design blog. A.MATTER is an <strong>independent magazine</strong> that treats architecture as a critical object, rather than just a background.</p>
+      <span class="hero__chip magazine-chip--sponsor">Sponsored by my lack of free time and powered by endless Notion databases</span>
+      <p class="magazine-statement__body">All of this is driven by three investigative tools // <strong>dialectical, archival, and analytical</strong> // which make up the magazine's main formats. The ultimate goal is to build a community of design, fashion, and architecture enthusiasts, which is a fancy way of saying I just want to find other people who overanalyze spaces as much as I do.</p>
+    </div>
+  </section>
+
+  <hr class="magazine-divider">
+
+  <section class="magazine-section magazine-formats">
+    <h2 class="magazine-formats__label">Main Format</h2>
+    <div class="magazine-formats__grid">
+      <div class="format-card">
+        <p class="format-card__label">// A.Question //</p>
+        <div class="format-card__image format-card__image--orange"></div>
+        <h3 class="format-card__heading">The Start of a Discussion <span class="hero__chip">Hopefully civil</span></h3>
+        <p class="format-card__text">The flagship format. Everything starts with // <strong>a.question</strong> // but honestly, the goal isn't to give you a definitive answer. It's just an excuse to start a debate. Consider it a prompt to overthink the most random topics across architecture, design, and art.</p>
+      </div>
+      <div class="format-card">
+        <p class="format-card__label">// A.Casestudy //</p>
+        <div class="format-card__image format-card__image--green"></div>
+        <h3 class="format-card__heading">Didactic by Choice <span class="hero__chip">Not out of boredom</span></h3>
+        <p class="format-card__text">An analytical format digging into architectural typologies, creative fields, and pure architectural marketing. I // <strong>overanalyze</strong> // everything from entire buildings down to a single piece of furniture, just to uncover its underlying concepts.</p>
+      </div>
+      <div class="format-card">
+        <p class="format-card__label">// A.Story //</p>
+        <div class="format-card__image format-card__image--purple"></div>
+        <h3 class="format-card__heading">The Historical &amp; Archival Matrix <span class="hero__chip">Or how we nerd out</span></h3>
+        <p class="format-card__text">A complete picture of architecture and design. Don't panic, this isn't your sleep-inducing architectural history lecture. It's more of a // <strong>column</strong> // dedicated to discovering and meticulously analyzing the events that shaped the world we are so deeply obsessed with.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="index.html" class="site-footer__brand">Aldo Marsiglia</a>
+      <div class="site-footer__meta">Portfolio / Archivio</div>
+    </div>
+    <div class="site-footer__meta">© 2026</div>
+  </div>
+</footer>
+
+<p class="colophon">Aggiornato — 09.09.2026 — Made with Figma + VS Code</p>
+
+<script src="cursor.js"></script>
+<script src="nav-contacts.js"></script>
+<script src="hero-slideshow.js"></script>
+
+</body>
+</html>

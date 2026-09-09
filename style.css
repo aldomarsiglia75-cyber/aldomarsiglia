@@ -1350,12 +1350,19 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   padding-bottom: 3rem;
 }
 
+/* "Aldo Marsiglia"/"Portfolio Archivio" e "© 2026" allineati agli
+   stessi margini sinistro/destro del resto della pagina (--hero-margin,
+   come nav e claim) — non più quelli più larghi di .wrap (--edge, 96px),
+   richiesto dall'utente. Il colophon sotto resta invece centrato. */
 .site-footer .wrap {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 2rem;
   flex-wrap: wrap;
+  max-width: none;
+  padding-left: var(--hero-margin);
+  padding-right: var(--hero-margin);
 }
 
 .site-footer__brand {
@@ -1885,14 +1892,36 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
    3) foto (.hero-thumb base, stessa larghezza di Works) — "Doing",
       overlay col chip "Supposed to be" */
 
-.hero__chip--hopei { left: 4.514vw; }
+.hero__chip--hopei { left: 5.347vw; } /* base 4.514vw + 12px richiesti dall'utente */
 
 /* "Supposed to be": più in alto del centro della riga di default —
    richiesto dall'utente, prima 12px (0.833vw), poi abbassato di altri
    6px su richiesta successiva → 6px (0.417vw) nette sopra il centro. */
 .hero__chip--supposedtobe {
-  left: 49.931vw;
+  left: 50.347vw; /* base 49.931vw + 6px, si muove insieme a "Doing" */
   top: calc(50% - 0.417vw);
+}
+
+/* nudge ottici sul claim: i contenitori sono già allineati esattamente
+   allo stesso margine (.hero-row usa lo stesso padding ovunque), ma
+   lettere/immagine diverse hanno un "peso" ottico diverso (bordo netto
+   di una foto vs bearing interno di una lettera) e sembrano scostate
+   pur coincidendo tecnicamente — correzioni a occhio richieste
+   dall'utente, position:relative non tocca il flusso/lo space-between
+   degli altri elementi della riga. */
+.about-hero__doing {
+  position: relative;
+  left: 0.417vw; /* 6px, si muove insieme al chip "Supposed to be" */
+}
+
+.about-hero__whatim {
+  position: relative;
+  left: 0.833vw; /* 12px */
+}
+
+.about-hero__thumb-doing {
+  position: relative;
+  left: 0.833vw; /* 12px */
 }
 
 .about-divider {
@@ -1987,11 +2016,17 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   padding: 0 4.167vw;
 }
 
+/* riusa .hero-thumb (stesso meccanismo delle foto del claim): velo
+   rosso a riposo, colori originali al passaggio del mouse — richiesto
+   dall'utente. .about-bio__photo qui sovrascrive solo dimensione e
+   raggio (40px invece dei 6px di base), niente slideshow (una sola
+   immagine, sempre "is-active", nessun data-slideshow). */
 .about-bio__photo {
   flex: none;
+  position: relative;
+  left: -0.417vw; /* 6px a sinistra, richiesto dall'utente */
   width: 37.5vw;
   height: 37.5vw;
-  object-fit: cover;
   border-radius: 2.778vw; /* 40px */
 }
 
@@ -2044,8 +2079,12 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
 
 .about-cards {
   display: flex;
-  gap: 4.236vw; /* 55.903 - 4.583 - 47.083 */
-  padding-left: 4.583vw;
+  /* Hard Skills al margine sinistro, Education al margine destro —
+     stesso --hero-margin usato dal claim, non più un gap fisso con
+     inset ad hoc: prima Education aveva ~66px di spazio vuoto a destra
+     invece di stare a filo margine, richiesto dall'utente. */
+  justify-content: space-between;
+  padding: 0 var(--hero-margin);
   margin-top: 3.333vw; /* 48px: 36px iniziali + altri 12px richiesti dall'utente */
 }
 
@@ -2148,7 +2187,7 @@ body.journal .site-nav a.nav-pill[aria-current="page"] {
   .about-cards {
     flex-direction: column;
     gap: 1.5rem;
-    padding-left: 0;
+    padding: 0;
   }
 
   .about-card {

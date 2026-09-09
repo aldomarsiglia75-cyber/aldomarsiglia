@@ -395,7 +395,10 @@ h1, h2, h3, p, figure, blockquote {
   font-family: var(--font-display);
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 1rem;
+  /* stessa dimensione dei link di Contacts (0.8075rem): i due pannelli
+     devono pesare uguale in altezza, richiesto dall'utente — restano
+     una riga in più (4 voci contro 3), la differenza minima. */
+  font-size: 0.8075rem;
   letter-spacing: var(--track-tight);
   color: #fff;
   text-decoration: none;
@@ -749,9 +752,13 @@ body.magazine .debug-grid {
 }
 
 @media (max-width: 640px) {
-  /* la pura scala vw diventa illeggibile sotto una certa larghezza: qui
-     l'hero passa a un impilamento verticale semplice invece di provare a
-     mantenere le stesse proporzioni del canvas 1440. */
+  /* seconda revisione: non più un impilamento verticale (testo e foto
+     uno sotto l'altro perdevano la relazione "riga allineata" che ha
+     senso su desktop, richiesto dall'utente di correggere) — restano
+     in riga come su desktop, ma testo/foto/chip/frecce si riducono
+     abbastanza da starci fianco a fianco su uno schermo stretto.
+     flex-wrap resta come rete di sicurezza sulle righe più affollate
+     (es. "I" + foto + "Know" + chip su About). */
   .hero {
     height: auto;
     padding: 2rem 1.25rem 3rem;
@@ -767,10 +774,12 @@ body.magazine .debug-grid {
   }
 
   .hero-row {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    row-gap: 0.5rem;
+    column-gap: 3vw;
     padding: 0.5rem 0;
-    gap: 0.75rem;
   }
 
   .hero-row + .hero-row {
@@ -778,7 +787,7 @@ body.magazine .debug-grid {
   }
 
   .hero__title {
-    font-size: 14vw;
+    font-size: 9vw;
     white-space: normal;
   }
 
@@ -787,20 +796,29 @@ body.magazine .debug-grid {
   .hero-thumb--junior,
   .hero-thumb--architect,
   .hero-thumb--about {
-    width: 100%;
-    height: 40vw;
+    width: 30vw;
+    height: 18vw;
+    flex: none;
   }
 
   .hero__chip {
     position: static;
     transform: none;
     width: auto;
-    padding: 0 1rem;
-    margin-top: 0.5rem;
+    height: auto;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.65rem;
+    margin-top: 0;
   }
 
   .hero__arrows {
     margin-top: 0;
+    gap: 0.6rem;
+  }
+
+  .hero__arrow {
+    width: 3.5vw;
+    height: 5vw;
   }
 }
 

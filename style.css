@@ -1370,7 +1370,10 @@ body.magazine .debug-grid {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - var(--nav-h));
+  /* +48px (3.333vw): il video (flex:1, sotto) è l'unico elemento
+     elastico della colonna, quindi tutta quest'altezza extra allunga
+     lui verso il basso — richiesto dall'utente. */
+  height: calc(100vh - var(--nav-h) + 3.333vw);
 }
 
 /* rettangolo come maschera di ritaglio per il video: overflow:hidden +
@@ -1579,8 +1582,14 @@ body.magazine .debug-grid {
   white-space: nowrap;
 }
 
+/* min-width invece di width fissa: "NOT A MOODBOARD" a questo font-size
+   è più larga di 140px, con width fissa e zero padding usciva dalla
+   pillola bianca ed essendo testo rosso su fondo rosso spariva —
+   richiesto dall'utente che ora si veda per intero. */
 .magazine-chip--tag {
-  width: 10.208vw; /* 9.722vw +5% */
+  width: auto;
+  min-width: 10.208vw; /* 9.722vw +5% */
+  padding: 0 0.5vw;
 }
 
 .magazine-chip--sponsor {

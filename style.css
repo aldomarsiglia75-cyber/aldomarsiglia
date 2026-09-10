@@ -2245,17 +2245,21 @@ body.magazine .debug-grid {
 }
 
 .project-detail__back {
-  font-family: var(--font-mono);
-  /* solo la freccia (il testo "Works" è stato rimosso, richiesto via
-     Agentation): ingrandita e in bold per restare leggibile/cliccabile
-     da sola. */
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  display: inline-flex;
   color: var(--accent);
   text-decoration: none;
   align-self: flex-start;
   transition: opacity 0.15s ease;
+}
+
+/* stessa grafica (stelo + chevron, stroke spesso) delle frecce del claim
+   Works (.hero__arrow), ruotata di 90° per puntare a sinistra e
+   proporzionata alla sidebar stretta della pagina progetto — richiesto
+   via Agentation ("un po' più grande, simile a quella del claim works"). */
+.project-detail__back-icon {
+  width: 1.5rem;
+  height: 2.1rem;
+  transform: rotate(90deg);
 }
 
 .project-detail__back:hover,
@@ -2801,12 +2805,13 @@ body.magazine .debug-grid {
      inset ad hoc: prima Education aveva ~66px di spazio vuoto a destra
      invece di stare a filo margine, richiesto dall'utente. */
   justify-content: space-between;
-  /* flex-start invece dello stretch di default: altrimenti Education
-     (meno contenuto) veniva forzata alla stessa altezza di Hard Skills
-     e il centraggio interno (.about-card) si spalmava su uno spazio
-     vuoto quasi doppio (44px vs 23px di margine sopra/sotto al testo) —
-     proporzioni disomogenee fra le due card, segnalato via Agentation. */
-  align-items: flex-start;
+  /* stretch: le due card devono avere la stessa altezza (richiesto via
+     Agentation). Prima dello scaling -8.5% del testo di Hard Skills (v.
+     .about-card--skills sotto) lo stretch forzava un divario di 55px fra
+     i due riquadri e il centraggio interno (.about-card) si spalmava su
+     spazio vuoto sproporzionato; ora che il gap naturale è sceso a 26px
+     la differenza di padding fra le due card è minima e non si nota. */
+  align-items: stretch;
   padding: 0 var(--hero-margin);
   margin-top: 3.333vw; /* 48px: 36px iniziali + altri 12px richiesti dall'utente */
 }

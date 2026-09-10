@@ -2451,15 +2451,12 @@ body.magazine .debug-grid {
 
 /* ogni .project-detail__stage porta la propria --ratio inline (vedi pagina):
    aspect-ratio deriva l'altezza dalla larghezza reale disponibile (piena
-   larghezza del viewport), invece di assumere un'altezza fissa uguale per
-   tutti. Padding interno (richiesto via Agentation, "più bianco" intorno
-   agli elaborati): l'immagine non riempie più tutto il riquadro a bordo
-   vivo, resta un margine di --paper visibile su ogni lato. 2rem (32px) era
-   impercettibile su elaborati enormi (pannello pinnato ~alto quanto lo
-   schermo) — verificato via Agentation che restava "a tutto forma" nelle
-   foto e indistinguibile dallo sfondo bianco dei disegni 2D — portato a
-   5.556vw (80px a 1440) così il margine si vede sempre, qualunque sia il
-   contenuto dell'immagine. */
+   larghezza del viewport) — così ogni elaborato riempie il pannello senza
+   ritaglio e senza bordo bianco, qualunque sia il formato, invece di
+   assumere un'altezza fissa uguale per tutti. Comportamento di base (foto,
+   render, assonometrie): a tutto formato, niente margine — richiesto via
+   Agentation dopo aver provato un margine --paper (bocciato: "non voglio
+   il bianco, l'immagine deve occupare lo spazio"). */
 .project-detail__stage {
   position: relative;
   width: 100%;
@@ -2467,8 +2464,6 @@ body.magazine .debug-grid {
   border-bottom: 1px solid var(--accent);
   background: var(--paper);
   overflow: hidden;
-  padding: 5.556vw;
-  box-sizing: border-box;
 }
 
 /* 6px di distanza fra un elaborato e il successivo — richiesto via
@@ -2483,11 +2478,29 @@ body.magazine .debug-grid {
 
 .project-detail__stage img {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 2D drawings, unica eccezione (richiesto via Agentation): margine intorno
+   al disegno, ma trasparente — si deve vedere la griglia di sfondo della
+   pagina, non un riquadro --paper pieno. Lo sfondo di .project-detail__stage
+   sopra è opaco per foto/render/assonometrie; qui va annullato così il
+   canvas della pagina (dietro, .debug-grid compresa) torna visibile nel
+   margine. */
+.project-detail__stage[data-phase="draw"] {
+  background: transparent;
+  padding: 5.556vw;
+  box-sizing: border-box;
+}
+
+.project-detail__stage[data-phase="draw"] img {
   inset: 5.556vw;
   width: calc(100% - 11.112vw);
   height: calc(100% - 11.112vw);
-  object-fit: cover;
-  display: block;
 }
 
 /* foto modello: bianco/nero come le card della griglia Works, a colori solo
@@ -2588,13 +2601,13 @@ body.magazine .debug-grid {
     display: none;
   }
 
-  /* stream già stretto (sidebar fissa 15rem): margine più piccolo in valore
-     assoluto ma comunque proporzionalmente visibile sui telefoni. */
-  .project-detail__stage {
+  /* stream già stretto (sidebar fissa 15rem): margine trasparente ridotto
+     per i 2D drawings, stesso trattamento del desktop in scala minore. */
+  .project-detail__stage[data-phase="draw"] {
     padding: 1.5rem;
   }
 
-  .project-detail__stage img {
+  .project-detail__stage[data-phase="draw"] img {
     inset: 1.5rem;
     width: calc(100% - 3rem);
     height: calc(100% - 3rem);

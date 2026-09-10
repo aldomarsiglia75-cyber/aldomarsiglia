@@ -2226,6 +2226,18 @@ body.magazine .debug-grid {
    uno stato interattivo, non decorazione: l'unico elemento rosso è il
    puntino di fase attivo nel pannello. */
 
+/* la nav, su tutte le altre pagine, scorre via col resto (vedi sopra) —
+   qui invece resta agganciata in cima: la sidebar e il pin dello stream
+   sono già ancorati a var(--nav-h) dall'alto e sparendo lascerebbe un
+   vuoto lì sopra mentre si scorre gli elaborati (richiesto via
+   Agentation, coerente su tutte le pagine progetto). */
+body.project-detail .site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 .project-detail__panel {
   position: fixed;
   top: var(--nav-h);

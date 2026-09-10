@@ -2451,9 +2451,10 @@ body.magazine .debug-grid {
 
 /* ogni .project-detail__stage porta la propria --ratio inline (vedi pagina):
    aspect-ratio deriva l'altezza dalla larghezza reale disponibile (piena
-   larghezza del viewport) — così ogni elaborato riempie il pannello senza
-   ritaglio e senza bordo bianco, qualunque sia il formato, invece di
-   assumere un'altezza fissa uguale per tutti. */
+   larghezza del viewport), invece di assumere un'altezza fissa uguale per
+   tutti. Padding interno (richiesto via Agentation, "più bianco" intorno
+   agli elaborati): l'immagine non riempie più tutto il riquadro a bordo
+   vivo, resta un margine di --paper visibile su ogni lato. */
 .project-detail__stage {
   position: relative;
   width: 100%;
@@ -2461,6 +2462,8 @@ body.magazine .debug-grid {
   border-bottom: 1px solid var(--accent);
   background: var(--paper);
   overflow: hidden;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
 /* 6px di distanza fra un elaborato e il successivo — richiesto via
@@ -2475,9 +2478,9 @@ body.magazine .debug-grid {
 
 .project-detail__stage img {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: 2rem;
+  width: calc(100% - 4rem);
+  height: calc(100% - 4rem);
   object-fit: cover;
   display: block;
 }
@@ -2578,6 +2581,18 @@ body.magazine .debug-grid {
 
   .project-detail__progress {
     display: none;
+  }
+
+  /* stream già stretto (sidebar fissa 15rem): padding ridotto per non
+     ritagliare troppo l'immagine sui telefoni più piccoli. */
+  .project-detail__stage {
+    padding: 0.75rem;
+  }
+
+  .project-detail__stage img {
+    inset: 0.75rem;
+    width: calc(100% - 1.5rem);
+    height: calc(100% - 1.5rem);
   }
 }
 

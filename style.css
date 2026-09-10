@@ -1877,9 +1877,15 @@ body.magazine .debug-grid {
   object-fit: fill;
 }
 
-.format-card__image--orange { background: #ff7b00; }
-.format-card__image--green { background: #5d994e; }
-.format-card__image--purple { background: #bb1fe6; }
+/* bianco invece del colore pieno: durante il crossfade dello slideshow
+   (.hero-thumb__img, opacity in transizione) per un istante nessuna foto
+   è a piena opacità e si vedeva il colore del rettangolo sotto —
+   richiesto via Agentation, colore uniforme bianco per tutte e tre. */
+.format-card__image--orange,
+.format-card__image--green,
+.format-card__image--purple {
+  background: #fff;
+}
 
 .format-card__heading {
   margin: 1.4vw 0 0.6vw;
@@ -1889,6 +1895,15 @@ body.magazine .debug-grid {
   font-size: 1.667vw; /* 24px */
   line-height: 1.1;
   color: #fff;
+}
+
+/* "Hopefully civil" (A.Question) e "Not out of boredom" (A.Casestudy)
+   abbassate di 6px — richiesto via Agentation, solo queste due, non la
+   terza etichetta ("Or how we nerd out"). */
+.format-card:nth-child(1) .format-card__heading .hero__chip,
+.format-card:nth-child(2) .format-card__heading .hero__chip {
+  position: relative;
+  top: 6px;
 }
 
 .format-card__text {
@@ -2231,7 +2246,11 @@ body.magazine .debug-grid {
 
 .project-detail__back {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  /* solo la freccia (il testo "Works" è stato rimosso, richiesto via
+     Agentation): ingrandita e in bold per restare leggibile/cliccabile
+     da sola. */
+  font-size: 1.4rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--accent);
   text-decoration: none;
@@ -2259,6 +2278,7 @@ body.magazine .debug-grid {
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.01em;
+  text-transform: uppercase; /* richiesto via Agentation su Intreccio, coerente con gli altri titoli maiuscoli del sito */
   color: var(--accent);
   text-wrap: balance;
 }
@@ -2437,6 +2457,16 @@ body.magazine .debug-grid {
   border-bottom: 1px solid var(--accent);
   background: var(--paper);
   overflow: hidden;
+}
+
+/* 6px di distanza fra un elaborato e il successivo — richiesto via
+   Agentation. Selettore fra fratelli (non margin-bottom su tutti):
+   niente spazio extra dopo l'ultimo, prima di .project-detail__end.
+   Il tracker in project-detail.js legge le posizioni reali (offsetTop/
+   scrollHeight) quindi il gap viene già misurato correttamente, nessun
+   valore da aggiornare lì. */
+.project-detail__stage + .project-detail__stage {
+  margin-top: 6px;
 }
 
 .project-detail__stage img {

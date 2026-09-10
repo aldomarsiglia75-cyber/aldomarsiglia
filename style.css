@@ -121,6 +121,47 @@ body.magazine .cursor-dot {
   background: #fff;
 }
 
+/* ---- pallino fisso Instagram, solo su Magazine (richiesto dall'utente) --
+   accesso diretto al profilo IG, alternativa al link già presente ma
+   nascosto nel dropdown Contacts. Bianco/rosso invece di rosso pieno:
+   stesso motivo di .cursor-dot/.nav-contacts__panel qui sopra — un
+   cerchio rosso sparirebbe sul fondo rosso della pagina. ---- */
+.ig-fab {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--accent);
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  z-index: 50;
+  transition: transform 0.2s ease;
+}
+
+.ig-fab:hover,
+.ig-fab:focus-visible {
+  transform: scale(1.08);
+}
+
+.ig-fab svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .ig-fab {
+    right: 1.25rem;
+    bottom: 1.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
 /* ---- reset --------------------------------------------------------------- */
 
 * {
@@ -1454,6 +1495,12 @@ body.magazine .debug-grid {
      elastico della colonna, quindi tutta quest'altezza extra allunga
      lui verso il basso — richiesto dall'utente. */
   height: calc(100vh - var(--nav-h) + 3.333vw);
+  /* -36px: sottrae spazio al fondo del contenitore, quindi solo al
+     video (l'unico elemento flex:1, elastico) — lo restringe di 36px
+     mantenendo fisso il suo bordo superiore, mentre claim/frecce/icone
+     (.magazine-claim__headline, stesso margine dal video) si ritrovano
+     spostati in blocco di 36px più in alto. Richiesto dall'utente. */
+  padding-bottom: 2.5vw; /* 36px */
 }
 
 /* rettangolo come maschera di ritaglio per il video: overflow:hidden +
@@ -1705,9 +1752,31 @@ body.magazine .debug-grid {
   color: #fff;
 }
 
+/* slideshow riusa .hero-thumb__img (stesso meccanismo di About/Work:
+   data-slideshow + hero-slideshow.js, fade ogni 1200ms) — position:
+   relative/overflow:hidden per contenere le immagini assolute dentro
+   l'angolo arrotondato. Niente velo rosso (.hero-thumb__tint): qui non
+   è uno stato interattivo hover come in Work, richiesto dall'utente. */
+/* altezza 4:5 (proporzione reale dei post Instagram usati come cover,
+   1080x1350) invece dei 600/1440 originali: prima, con cover, le
+   scritte vicine ai bordi delle foto venivano tagliate; con contain
+   restavano fasce di colore vuote sopra/sotto. Facendo combaciare le
+   proporzioni del rettangolo con quelle delle foto, cover (default di
+   .hero-thumb__img) le riempie per intero senza tagliare né lasciare
+   spazi vuoti — richiesto dall'utente. */
 .format-card__image {
-  height: 41.667vw; /* 600/1440 */
+  position: relative;
+  height: 32.917vw; /* 450/1440 (4:5) + 24px (1.667vw), richiesto dall'utente */
   border-radius: 2vw;
+  overflow: hidden;
+}
+
+/* fill invece di cover (default di .hero-thumb__img): lo stretch di
+   24px richiesto dall'utente rompe la proporzione 4:5 esatta delle
+   foto — fill le allunga insieme al rettangolo invece di ritagliarle
+   (cover) o lasciare fasce vuote (contain). */
+.format-card__image .hero-thumb__img {
+  object-fit: fill;
 }
 
 .format-card__image--orange { background: #ff7b00; }
@@ -1825,7 +1894,11 @@ body.magazine .debug-grid {
   }
 
   .format-card__image {
-    height: 90vw;
+    /* stessa proporzione 4:5 del desktop, calcolata sulla larghezza
+       reale della colonna in mobile (100vw - i due padding laterali
+       di .magazine-section, 1.25rem ciascuno), + 24px di stretch
+       come su desktop. */
+    height: calc(125vw - 3.125rem + 24px);
   }
 
   .format-card__heading {
@@ -2030,14 +2103,15 @@ body.magazine .debug-grid {
 /* ---- project-detail: pagina di singolo progetto -------------------------
    Pannello descrittivo fisso a sinistra (title, etichette, specifiche) che
    non scorre mai, nemmeno sotto i 640px. A destra gli elaborati (foto del
-   modello, poi disegni 2D) scorrono in orizzontale agganciati allo scroll
-   verticale — stessa meccanica pin/track/progress di .h-gallery, applicata
-   in orizzontale invece che alla griglia Works. Ogni elaborato è largo
-   quanto la propria immagine alla piena altezza disponibile (vedi lo style
-   inline flex-basis in pagina): niente ritagli, niente margini bianchi,
-   qualunque sia il formato (orizzontale, verticale, un foglio di prospetti
-   impilati). Il rosso resta uno stato interattivo, non decorazione: l'unico
-   elemento rosso è il puntino di fase attivo nel pannello. */
+   modello, poi disegni 2D) scorrono in VERTICALE (dall'alto verso il basso,
+   richiesto dall'utente — prima era orizzontale) agganciati allo scroll
+   della pagina — stessa meccanica pin/track/progress di .h-gallery, qui
+   sull'asse verticale invece che orizzontale. Ogni elaborato è alto quanto
+   la propria immagine alla piena larghezza disponibile (--ratio inline in
+   pagina): niente ritagli, niente margini bianchi, qualunque sia il formato
+   (orizzontale, verticale, un foglio di prospetti impilati). Il rosso resta
+   uno stato interattivo, non decorazione: l'unico elemento rosso è il
+   puntino di fase attivo nel pannello. */
 
 .project-detail__panel {
   position: fixed;
@@ -2047,8 +2121,9 @@ body.magazine .debug-grid {
   width: min(34vw, 30rem);
   min-width: 19rem;
   padding: 2rem 2rem 1.6rem;
-  background: var(--paper);
-  border-right: 1px solid var(--line);
+  /* niente sfondo pieno: la griglia di debug deve restare visibile anche
+     qui, stesso trattamento "vetro" della nav — richiesto dall'utente. */
+  border-right: 1px solid var(--accent);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -2060,15 +2135,15 @@ body.magazine .debug-grid {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.02em;
-  color: var(--stone);
+  color: var(--accent);
   text-decoration: none;
   align-self: flex-start;
-  transition: color 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 
 .project-detail__back:hover,
 .project-detail__back:focus-visible {
-  color: var(--accent);
+  opacity: 0.7;
 }
 
 .project-detail__eyebrow {
@@ -2076,7 +2151,7 @@ body.magazine .debug-grid {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--stone);
+  color: var(--accent);
 }
 
 .project-detail__title {
@@ -2086,7 +2161,7 @@ body.magazine .debug-grid {
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--accent);
   text-wrap: balance;
 }
 
@@ -2096,7 +2171,7 @@ body.magazine .debug-grid {
   align-items: center;
   gap: 0.6rem;
   font-size: 0.82rem;
-  color: var(--stone);
+  color: var(--accent);
 }
 
 .project-detail__chip {
@@ -2114,7 +2189,7 @@ body.magazine .debug-grid {
 .project-detail__desc {
   font-size: 0.95rem;
   line-height: 1.55;
-  color: var(--ink);
+  color: var(--accent);
   max-width: 32ch;
 }
 
@@ -2123,12 +2198,13 @@ body.magazine .debug-grid {
   grid-template-columns: auto 1fr;
   gap: 0.5rem 1rem;
   font-size: 0.82rem;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--accent);
   padding-top: 1rem;
+  color: var(--accent);
 }
 
 .project-detail__specs dt {
-  color: var(--stone);
+  opacity: 0.7;
 }
 
 .project-detail__specs dd {
@@ -2142,7 +2218,7 @@ body.magazine .debug-grid {
 }
 
 .project-detail__tracker {
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--accent);
   padding-top: 1.1rem;
   display: flex;
   flex-direction: column;
@@ -2159,14 +2235,15 @@ body.magazine .debug-grid {
   font-size: 0.74rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--stone);
+  color: var(--accent);
 }
 
 .project-detail__tracker-phase {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  transition: color 0.25s ease;
+  opacity: 0.6;
+  transition: opacity 0.25s ease;
 }
 
 .project-detail__tracker-dot {
@@ -2178,7 +2255,7 @@ body.magazine .debug-grid {
 }
 
 .project-detail__tracker-phase.is-active {
-  color: var(--ink);
+  opacity: 1;
   font-weight: 600;
 }
 
@@ -2198,7 +2275,7 @@ body.magazine .debug-grid {
   font-family: var(--font-mono);
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--accent);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -2207,7 +2284,7 @@ body.magazine .debug-grid {
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.25;
-  color: var(--ink);
+  color: var(--accent);
   transition: opacity 0.18s ease;
 }
 
@@ -2240,23 +2317,26 @@ body.magazine .debug-grid {
   position: relative;
 }
 
+/* niente display:flex qui (a differenza della versione orizzontale
+   precedente): impilare i .project-detail__stage in verticale è il
+   comportamento di default del flusso a blocchi, non serve forzarlo — ed
+   evita ogni ambiguità nel calcolo dell'altezza via aspect-ratio che un
+   contenitore flex-column potrebbe introdurre. */
 .project-detail__track {
-  display: flex;
-  height: 100%;
+  width: 100%;
   will-change: transform;
 }
 
 /* ogni .project-detail__stage porta la propria --ratio inline (vedi pagina):
-   aspect-ratio deriva la larghezza dall'altezza reale disponibile, qualunque
-   essa sia (100vh in modalità pin, 60vh nel fallback sotto i 640px) — così
-   ogni elaborato riempie il pannello senza ritaglio e senza bordo bianco,
-   a qualunque altezza si trovi a renderizzare, invece di assumere 100vh. */
+   aspect-ratio deriva l'altezza dalla larghezza reale disponibile (piena
+   larghezza del viewport) — così ogni elaborato riempie il pannello senza
+   ritaglio e senza bordo bianco, qualunque sia il formato, invece di
+   assumere un'altezza fissa uguale per tutti. */
 .project-detail__stage {
   position: relative;
-  flex: 0 0 auto;
-  height: 100%;
+  width: 100%;
   aspect-ratio: var(--ratio, 1.5);
-  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--accent);
   background: var(--paper);
   overflow: hidden;
 }
@@ -2287,7 +2367,7 @@ body.magazine .debug-grid {
   right: 0;
   bottom: 0;
   height: 4px;
-  background: var(--line);
+  background: rgba(204, 0, 0, 0.16); /* --line ma in rosso, così il fill sopra resta distinguibile */
   z-index: 4;
 }
 
@@ -2299,13 +2379,12 @@ body.magazine .debug-grid {
 }
 
 .project-detail__end {
-  flex: 0 0 26vw;
-  min-width: 18rem;
-  height: 100%;
+  width: 100%;
+  min-height: 18rem;
   display: flex;
   align-items: center;
   padding: 3rem;
-  color: var(--stone);
+  color: var(--accent);
   font-size: 0.85rem;
 }
 
@@ -2344,18 +2423,24 @@ body.magazine .debug-grid {
   .project-detail__progress {
     left: 15rem;
   }
-
-  .project-detail__end {
-    flex-basis: 70vw;
-  }
 }
 
 @media (max-width: 640px) {
-  /* stessa soglia e stessa semplificazione di .h-gallery: sotto i 640px lo
-     scroll-jack via JS si disattiva (vedi mq in project-detail.js) e il
-     track prende un'altezza fissa più bassa invece di 100vh. */
+  /* stessa soglia di .h-gallery: sotto i 640px lo scroll-jack via JS si
+     disattiva (vedi mq in project-detail.js) — pin/viewport tornano al
+     flusso normale invece di restare agganciati a un riquadro alto quanto
+     lo schermo, e gli elaborati si impilano in verticale scorrendo con la
+     pagina stessa, senza bisogno di alcun meccanismo di scroll interno. */
+  .project-detail__pin {
+    position: static;
+    height: auto;
+  }
+
+  .project-detail__viewport {
+    overflow: visible;
+  }
+
   .project-detail__track {
-    height: 60vh;
     transform: none !important;
   }
 

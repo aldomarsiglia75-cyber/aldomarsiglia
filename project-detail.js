@@ -49,13 +49,13 @@
   }
 
   function activeFromOffset(offset) {
-    // stages have different widths (each sized to its own image's aspect
-    // ratio), so the active one is found from real offsetLeft positions,
-    // not by dividing by a single item width.
-    var target = offset + viewport.clientWidth / 2;
+    // stages have different heights (each sized to its own image's aspect
+    // ratio), so the active one is found from real offsetTop positions,
+    // not by dividing by a single item height.
+    var target = offset + viewport.clientHeight / 2;
     var chosen = stages[0];
     for (var i = 0; i < stages.length; i++) {
-      if (stages[i].offsetLeft <= target) chosen = stages[i];
+      if (stages[i].offsetTop <= target) chosen = stages[i];
       else break;
     }
     setActive(chosen);
@@ -67,7 +67,7 @@
       track.style.transform = '';
       return;
     }
-    var extra = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    var extra = Math.max(0, track.scrollHeight - viewport.clientHeight);
     section.style.height = (pinnedViewportHeight() + extra) + 'px';
   }
 
@@ -79,20 +79,32 @@
       var scrollable = section.offsetHeight - pinnedViewportHeight();
       var progressed = -section.getBoundingClientRect().top;
       var fraction = scrollable > 0 ? Math.min(1, Math.max(0, progressed / scrollable)) : 0;
-      var maxTranslate = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      var maxTranslate = Math.max(0, track.scrollHeight - viewport.clientHeight);
       var offset = fraction * maxTranslate;
-      track.style.transform = 'translateX(' + (-offset) + 'px)';
+      track.style.transform = 'translateY(' + (-offset) + 'px)';
       if (progressFill) progressFill.style.width = (fraction * 100) + '%';
       activeFromOffset(offset);
     });
   }
 
+  // sotto i 640px niente pin/scroll-jack: gli elaborati sono impilati nel
+  // flusso normale e scorrono con la pagina, quindi l'elaborato attivo si
+  // ricava dalla posizione reale rispetto alla finestra (non più da un
+  // offset interno al viewport, che qui non scorre più).
   function onNativeScroll() {
     if (pinnedMode()) return;
-    var offset = viewport.scrollLeft;
-    var maxTranslate = Math.max(1, track.scrollWidth - viewport.clientWidth);
-    if (progressFill) progressFill.style.width = (Math.min(1, offset / maxTranslate) * 100) + '%';
-    activeFromOffset(offset);
+    var target = window.innerHeight / 2;
+    var chosen = stages[0];
+    var bestDist = Infinity;
+    stages.forEach(function (s) {
+      var r = s.getBoundingClientRect();
+      var dist = Math.abs((r.top + r.height / 2) - target);
+      if (dist < bestDist) {
+        bestDist = dist;
+        chosen = s;
+      }
+    });
+    setActive(chosen);
   }
 
   setHeight();
@@ -104,5 +116,5 @@
     onScroll();
   });
   window.addEventListener('scroll', onScroll, { passive: true });
-  viewport.addEventListener('scroll', onNativeScroll, { passive: true });
+  window.addEventListener('scroll', onNativeScroll, { passive: true });
 })();

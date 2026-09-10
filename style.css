@@ -60,6 +60,26 @@
   --hero-gutter: 1.667vw;
   --hero-col: 6.25vw;
 
+  /* transitions-dev: icon-swap tokens, riusati per il crossfade di
+     .hero-thumb__img (stesso meccanismo: livelli impilati nello stesso
+     slot, opacity+filter+transform). --icon-swap-start-scale scostato dal
+     default 0.25 (pensato per glifi piccoli): su foto hero a piena
+     larghezza uno scale-in dal 25% sembrerebbe uno scatto/glitch invece
+     di un crossfade morbido. */
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.97;
+  --icon-swap-ease: ease-in-out;
+
+  /* transitions-dev: menu-dropdown tokens, per .nav-menu__panel e
+     .nav-contacts__panel (entrambi pannelli ancorati che crescono dal
+     trigger). */
+  --dropdown-open-dur: 250ms;
+  --dropdown-close-dur: 150ms;
+  --dropdown-pre-scale: 0.97;
+  --dropdown-closing-scale: 0.99;
+  --dropdown-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   /* altezza approssimativa della nav — la nav NON è sticky (scompare
      scorrendo), ma occupa spazio reale in flusso normale mentre il
      pannello delle pagine progetto è fixed: senza questo offset iniziale
@@ -379,10 +399,40 @@ h1, h2, h3, p, figure, blockquote {
   padding: 1rem 1.2rem;
   background: var(--accent);
   border-radius: 0.9rem;
+
+  /* transitions-dev: menu-dropdown — cresce dall'angolo in alto a destra,
+     dove sta il trigger (.nav-contacts__trigger). */
+  transform-origin: top right;
+  transform: scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-open-dur) var(--dropdown-ease);
+  will-change: transform, opacity;
 }
 
 .nav-contacts__panel[hidden] {
   display: none;
+}
+
+.nav-contacts__panel.is-open {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-contacts__panel.is-closing {
+  transform: scale(var(--dropdown-closing-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-close-dur) var(--dropdown-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-contacts__panel { transition: none !important; }
 }
 
 /* ".site-nav a.nav-contacts__link" e non solo ".nav-contacts__link":
@@ -426,10 +476,40 @@ h1, h2, h3, p, figure, blockquote {
   padding: 1rem 1.2rem;
   background: var(--accent);
   border-radius: 0.9rem;
+
+  /* transitions-dev: menu-dropdown — cresce dall'angolo in alto a
+     sinistra, dove sta il trigger (.brand-mark). */
+  transform-origin: top left;
+  transform: scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-open-dur) var(--dropdown-ease);
+  will-change: transform, opacity;
 }
 
 .nav-menu__panel[hidden] {
   display: none;
+}
+
+.nav-menu__panel.is-open {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-menu__panel.is-closing {
+  transform: scale(var(--dropdown-closing-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-close-dur) var(--dropdown-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-menu__panel { transition: none !important; }
 }
 
 .site-nav a.nav-menu__link {
@@ -689,11 +769,23 @@ body.magazine .debug-grid {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  filter: blur(var(--icon-swap-blur));
+  transform: scale(var(--icon-swap-start-scale));
+  transition:
+    opacity   var(--icon-swap-dur) var(--icon-swap-ease),
+    filter    var(--icon-swap-dur) var(--icon-swap-ease),
+    transform var(--icon-swap-dur) var(--icon-swap-ease);
+  will-change: opacity, filter, transform;
 }
 
 .hero-thumb__img.is-active {
   opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-thumb__img { transition: none !important; }
 }
 
 .hero-thumb__tint {
@@ -1495,12 +1587,14 @@ body.magazine .debug-grid {
      elastico della colonna, quindi tutta quest'altezza extra allunga
      lui verso il basso — richiesto dall'utente. */
   height: calc(100vh - var(--nav-h) + 3.333vw);
-  /* -36px: sottrae spazio al fondo del contenitore, quindi solo al
-     video (l'unico elemento flex:1, elastico) — lo restringe di 36px
+  /* -24px: sottrae spazio al fondo del contenitore, quindi solo al
+     video (l'unico elemento flex:1, elastico) — lo restringe di 24px
      mantenendo fisso il suo bordo superiore, mentre claim/frecce/icone
      (.magazine-claim__headline, stesso margine dal video) si ritrovano
-     spostati in blocco di 36px più in alto. Richiesto dall'utente. */
-  padding-bottom: 2.5vw; /* 36px */
+     spostati in blocco più in alto. Richiesto dall'utente (originario
+     -36px, poi -12px aggiuntivi via Agentation per ingrandire il video
+     verso il basso). */
+  padding-bottom: 1.667vw; /* 24px */
 }
 
 /* rettangolo come maschera di ritaglio per il video: overflow:hidden +
@@ -1612,8 +1706,12 @@ body.magazine .debug-grid {
 .magazine-claim__swatch {
   position: relative;
   top: 0.833vw; /* 12px, abbassato richiesto dall'utente */
-  width: 6.276vw; /* 5.457vw +15% (quarta volta, richiesto dall'utente) */
-  height: 8.369vw; /* 7.277vw +15% */
+  /* +9%: l'ink-height reale (misurata via canvas.measureText, non il
+     bounding box del font che include l'interlinea) di "A.MATTER" è
+     ~104px contro i ~95px dell'icona — la rendeva visibilmente più
+     piccola del testo di fianco, segnalato via Agentation. */
+  width: 6.841vw; /* 6.276vw +9% */
+  height: 9.122vw; /* 8.369vw +9% */
   overflow: hidden;
 }
 
@@ -2673,6 +2771,12 @@ body.magazine .debug-grid {
      inset ad hoc: prima Education aveva ~66px di spazio vuoto a destra
      invece di stare a filo margine, richiesto dall'utente. */
   justify-content: space-between;
+  /* flex-start invece dello stretch di default: altrimenti Education
+     (meno contenuto) veniva forzata alla stessa altezza di Hard Skills
+     e il centraggio interno (.about-card) si spalmava su uno spazio
+     vuoto quasi doppio (44px vs 23px di margine sopra/sotto al testo) —
+     proporzioni disomogenee fra le due card, segnalato via Agentation. */
+  align-items: flex-start;
   padding: 0 var(--hero-margin);
   margin-top: 3.333vw; /* 48px: 36px iniziali + altri 12px richiesti dall'utente */
 }
@@ -2693,6 +2797,57 @@ body.magazine .debug-grid {
 
 .about-card--skills { width: 47.083vw; }
 .about-card--education { width: 37.5vw; }
+
+/* Hard Skills ha 5 voci (contro le 3 di Education) e restava ~55px
+   più alta anche a align-items:flex-start — proporzioni diverse fra le
+   due card, segnalato via Agentation. Testo scalato del -8.5% (misurato
+   in browser via getBoundingClientRect finché l'altezza non combacia
+   con quella di Education) invece di toccare il contenuto. Guardia
+   min-width: non deve interferire con il breakpoint mobile sotto, che
+   fissa già le sue dimensioni in rem. */
+@media (min-width: 641px) {
+  .about-card--skills .about-card__heading {
+    font-size: 2.288vw; /* 2.5vw -8.5% */
+    margin-bottom: 1.464vw; /* 1.6vw -8.5% */
+  }
+
+  .about-card--skills .about-card__body {
+    font-size: 1.525vw; /* 1.667vw -8.5% */
+    line-height: 1.779vw; /* 1.944vw -8.5% */
+  }
+
+  .about-card--skills .about-card__body li {
+    margin-bottom: 0.915vw; /* 1vw -8.5% */
+  }
+}
+
+/* le etichette dentro alle liste (non quelle accanto/sotto al titolo,
+   escluse esplicitamente) devono arrivare al margine della lista prima
+   del punto elenco, non restare indentate quanto il testo — richiesto
+   via Agentation. <br> forzato in HTML prima di ogni chip così va
+   sempre a capo su una riga propria (altrimenti su alcune voci corte,
+   es. "Workflow: Notion", condivideva la riga col testo e il margine
+   negativo ci sarebbe finito sopra). Il valore è in vw (non em, come il
+   padding-left della lista) perché .hero__chip ha un font-size fisso
+   proprio (1.05vw) diverso da quello della lista che lo contiene —
+   Hard Skills e Education hanno basi di font diverse (scala -8.5% di
+   Hard Skills sopra), quindi ognuna ha il proprio -1.1em calcolato. */
+@media (min-width: 641px) {
+  .about-card--skills .about-card__body li .hero__chip {
+    margin-left: -1.678vw; /* -1.1em rispetto al font-size di Hard Skills (1.525vw) */
+  }
+
+  .about-card--education .about-card__body li .hero__chip {
+    margin-left: -1.834vw; /* -1.1em rispetto al font-size di Education (1.667vw) */
+  }
+
+  /* abbassate di altri 12px rispetto alle etichette del titolo (che
+     restano al top:0.139vw/2px condiviso di .about-cards .hero__chip)
+     — solo quelle di testo, richiesto via Agentation. */
+  .about-card__body li .hero__chip {
+    top: 0.972vw; /* 0.139vw + 12px (0.833vw) */
+  }
+}
 
 .about-card__heading {
   max-width: 34.167vw; /* 492px */

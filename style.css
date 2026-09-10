@@ -2454,7 +2454,12 @@ body.magazine .debug-grid {
    larghezza del viewport), invece di assumere un'altezza fissa uguale per
    tutti. Padding interno (richiesto via Agentation, "più bianco" intorno
    agli elaborati): l'immagine non riempie più tutto il riquadro a bordo
-   vivo, resta un margine di --paper visibile su ogni lato. */
+   vivo, resta un margine di --paper visibile su ogni lato. 2rem (32px) era
+   impercettibile su elaborati enormi (pannello pinnato ~alto quanto lo
+   schermo) — verificato via Agentation che restava "a tutto forma" nelle
+   foto e indistinguibile dallo sfondo bianco dei disegni 2D — portato a
+   5.556vw (80px a 1440) così il margine si vede sempre, qualunque sia il
+   contenuto dell'immagine. */
 .project-detail__stage {
   position: relative;
   width: 100%;
@@ -2462,7 +2467,7 @@ body.magazine .debug-grid {
   border-bottom: 1px solid var(--accent);
   background: var(--paper);
   overflow: hidden;
-  padding: 2rem;
+  padding: 5.556vw;
   box-sizing: border-box;
 }
 
@@ -2478,9 +2483,9 @@ body.magazine .debug-grid {
 
 .project-detail__stage img {
   position: absolute;
-  inset: 2rem;
-  width: calc(100% - 4rem);
-  height: calc(100% - 4rem);
+  inset: 5.556vw;
+  width: calc(100% - 11.112vw);
+  height: calc(100% - 11.112vw);
   object-fit: cover;
   display: block;
 }
@@ -2583,16 +2588,16 @@ body.magazine .debug-grid {
     display: none;
   }
 
-  /* stream già stretto (sidebar fissa 15rem): padding ridotto per non
-     ritagliare troppo l'immagine sui telefoni più piccoli. */
+  /* stream già stretto (sidebar fissa 15rem): margine più piccolo in valore
+     assoluto ma comunque proporzionalmente visibile sui telefoni. */
   .project-detail__stage {
-    padding: 0.75rem;
+    padding: 1.5rem;
   }
 
   .project-detail__stage img {
-    inset: 0.75rem;
-    width: calc(100% - 1.5rem);
-    height: calc(100% - 1.5rem);
+    inset: 1.5rem;
+    width: calc(100% - 3rem);
+    height: calc(100% - 3rem);
   }
 }
 

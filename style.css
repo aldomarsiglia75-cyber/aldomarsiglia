@@ -466,7 +466,15 @@ h1, h2, h3, p, figure, blockquote {
    confuso con la riga del logo su mobile. */
 .nav-menu__panel {
   position: absolute;
-  top: calc(100% + 0.6rem);
+  /* bug: "top: 100%" era relativo a .site-nav (l'intera barra), mentre
+     .nav-contacts__panel è relativo al suo trigger di 1.5rem (wrapper
+     .nav-contacts, centrato con top:50%) — il menu si apriva molto più in
+     basso del pannello contacts. Stesso ancoraggio: dal centro della nav
+     (50%, dove sono centrati sia il logo che il trigger contacts) più
+     metà del trigger contacts (0.75rem) più lo stesso gap (0.6rem) —
+     richiesto via Agentation, i due pannelli devono aprirsi alla stessa
+     altezza. */
+  top: calc(50% + 1.35rem);
   left: var(--hero-margin);
   z-index: 1;
   display: flex;
@@ -894,12 +902,27 @@ body.magazine .debug-grid {
      (es. "I" + foto + "Know" + chip su About). */
   .hero {
     height: auto;
-    padding: 2rem 1.25rem 3rem;
+    /* stesso margine laterale della nav (--hero-margin), non un valore
+       fisso a parte — richiesto via Agentation: il claim non era allineato
+       al margine sinistro/destro del logo "AM"/menu contacts. */
+    padding: 2rem var(--hero-margin) 3rem;
   }
 
   .hero-rows {
     position: static;
     padding: 0;
+  }
+
+  /* Home: sotto i 640px il claim risultava incollato in cima, appena sotto
+     la nav, con un vuoto enorme prima del footer — richiesto via
+     Agentation di portarlo più in basso, verso la posizione occupata dal
+     footer. Centrato verticalmente nello spazio sotto la nav invece di un
+     margin-top fisso: così resta "in mezzo" qualunque sia l'altezza reale
+     dello schermo. */
+  .hero--home {
+    min-height: calc(100vh - var(--nav-h));
+    display: flex;
+    align-items: center;
   }
 
   .hero--home .hero-rows {
@@ -913,6 +936,32 @@ body.magazine .debug-grid {
     row-gap: 0.5rem;
     column-gap: 3vw;
     padding: 0.5rem 0;
+  }
+
+  /* "Everyone" deve stare fra "Hi" e "I'm Aldo" come su desktop (dove è
+     posizionato assoluto sopra il testo) — qui il chip è in flusso
+     normale (position:static, vedi sotto) quindi l'ordine visivo segue
+     l'ordine nel markup (Hi, I'm Aldo, Everyone) a meno di correggerlo
+     con `order` — richiesto via Agentation. ".hero__title + .hero__title"
+     seleziona solo "I'm Aldo" (unico titolo preceduto da un altro titolo
+     nella riga), senza toccare le altre righe. */
+  .hero__title + .hero__title {
+    order: 2;
+  }
+
+  .hero__chip--everyone {
+    order: 1;
+  }
+
+  /* "Wanna be" deve stare vicino a "Architect" come su desktop — qui la
+     riga va a capo per larghezza (foto + testo + chip non ci stanno su
+     una riga sola) e senza intervenire l'ultimo elemento che eccede va
+     a capo da solo sotto la foto, lontano dal testo. Sposto la foto in
+     coda (order più alto, resta comunque prima nel markup) così il testo
+     e il chip — più corti insieme — restano sulla stessa riga, ed è la
+     foto a scendere sotto, non il chip — richiesto via Agentation. */
+  .hero-thumb--architect {
+    order: 1;
   }
 
   .hero-row + .hero-row {
@@ -2613,8 +2662,30 @@ body.project-detail .site-nav {
     display: none;
   }
 
-  /* stream già stretto (sidebar fissa 15rem): margine trasparente ridotto
-     per i 2D drawings, stesso trattamento del desktop in scala minore. */
+  /* bug: sotto i 640px la sidebar (.project-detail__panel) restava
+     "position: fixed" a 15rem (ereditato dalla soglia 860px) e lo stream
+     manteneva margin-left/width calcolati per farci spazio — su un
+     telefono reale (~375-430px) restavano ~150px per le immagini,
+     illeggibili. Sotto questa soglia la sidebar deve uscire dal
+     posizionamento fisso ed entrare nel flusso normale, a piena
+     larghezza, con lo stream impilato sotto — non più accanto. */
+  .project-detail__panel {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-top: var(--nav-h);
+    border-right: none;
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .project-detail__stream {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* stream ora a piena larghezza: il margine trasparente dei 2D drawings
+     torna a una misura assoluta comoda invece della scala ridotta pensata
+     per lo stream stretto accanto alla sidebar. */
   .project-detail__stage[data-phase="draw"] {
     padding: 1.5rem;
   }
